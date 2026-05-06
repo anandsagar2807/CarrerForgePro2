@@ -48,17 +48,17 @@ const FeatureCard = ({ feature, index }) => (
     transition={{ duration: 0.5, delay: index * 0.1 }}
     className="group relative"
   >
-    <div className="relative h-full bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+    <div className="relative h-full bg-white/5 backdrop-blur-xl rounded-[2rem] p-8 border border-white/10 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-2 hover:border-blue-500/30">
       {/* Icon container */}
-      <div className={`w-14 h-14 bg-gradient-to-br ${feature.gradient} rounded-xl flex items-center justify-center mb-6 shadow-md group-hover:scale-105 transition-transform duration-300`}>
-        <feature.icon className="w-7 h-7 text-white" />
+      <div className={`w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
+        <feature.icon className="w-8 h-8 text-white" />
       </div>
 
       {/* Content */}
-      <h3 className="text-xl font-bold text-slate-900 mb-3">
+      <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">
         {feature.title}
       </h3>
-      <p className="text-slate-600 leading-relaxed">
+      <p className="text-slate-400 leading-relaxed font-medium">
         {feature.description}
       </p>
     </div>
@@ -67,52 +67,55 @@ const FeatureCard = ({ feature, index }) => (
 
 const Features = () => {
   return (
-    <section id="features" className="relative">
-      {/* Header */}
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <motion.div
-          id="powerful-features"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-6"
-        >
-          <Sparkles className="w-4 h-4 text-blue-700" />
-          <span className="text-sm font-bold text-blue-900">
-            Powerful Features
-          </span>
-        </motion.div>
+    <section id="features" className="py-24 lg:py-32 relative bg-[#020617]">
+      <div className="section-container relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <motion.div
+            id="powerful-features"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-5 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-8"
+          >
+            <Sparkles className="w-4 h-4 text-blue-400" />
+            <span className="text-sm font-bold text-blue-100 uppercase tracking-widest">
+              Powerful Features
+            </span>
+          </motion.div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight"
-        >
-          Everything you need to
-          <br />
-          <span className="text-blue-800">
-            land your dream job
-          </span>
-        </motion.h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter"
+          >
+            Everything you need to
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+              land your dream job
+            </span>
+          </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="text-xl text-slate-500"
-        >
-          Our platform combines cutting-edge AI with proven resume strategies used by professionals at top companies.
-        </motion.p>
-      </div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-slate-400 font-medium"
+          >
+            Our AI-driven platform provides all the tools necessary to create a 
+            high-impact resume that resonates with recruiters.
+          </motion.p>
+        </div>
 
-      {/* Features Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {features.map((feature, index) => (
-          <FeatureCard key={feature.title} feature={feature} index={index} />
-        ))}
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+          {features.map((feature, index) => (
+            <FeatureCard key={index} feature={feature} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );

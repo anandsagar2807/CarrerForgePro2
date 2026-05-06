@@ -4,7 +4,7 @@ A professional AI-powered resume builder with advanced features including ATS op
 
 ---
 
-# Features
+# 🚀 Features
 
 - **8 Professional Templates**
   - Modern
@@ -62,7 +62,7 @@ A professional AI-powered resume builder with advanced features including ATS op
 
 ---
 
-# Getting Started
+# 📦 Getting Started
 
 ## Prerequisites
 
@@ -105,7 +105,7 @@ npm install
 
 ---
 
-#  Environment Variables
+# 🔑 Environment Variables
 
 ## Backend `.env`
 
@@ -150,7 +150,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-#  Running the Application
+# ▶️ Running the Application
 
 ## Start Backend Server
 
@@ -213,7 +213,7 @@ ResumeForge-Pro/
 
 ---
 
-#  API Endpoints
+# 🔌 API Endpoints
 
 # Authentication Routes
 
@@ -258,7 +258,7 @@ ResumeForge-Pro/
 
 ---
 
-# AI-Powered Resume Analysis
+# 🤖 AI-Powered Resume Analysis
 
 ## ATS Score Checker
 
@@ -363,7 +363,7 @@ const MODELS = {
 
 ---
 
-# Rate Limiting
+# 🚦 Rate Limiting
 
 ```javascript
 AI_REQUESTS_PER_MINUTE=30
@@ -372,7 +372,7 @@ AI_REQUESTS_PER_DAY=1000
 
 ---
 
-#  Usage Tracking Example
+# 📊 Usage Tracking Example
 
 ```json
 {
@@ -386,7 +386,7 @@ AI_REQUESTS_PER_DAY=1000
 
 ---
 
-#  Deployment
+# 🚀 Deployment
 
 # Production Checklist
 
@@ -404,7 +404,7 @@ AI_REQUESTS_PER_DAY=1000
 
 ---
 
-# Quick Deployment Platforms
+# ☁️ Quick Deployment Platforms
 
 | Service | Platform |
 |---------|----------|
@@ -415,7 +415,7 @@ AI_REQUESTS_PER_DAY=1000
 
 ---
 
-#  Environment Variables Reference
+# 📄 Environment Variables Reference
 
 ## Required Variables
 
@@ -494,7 +494,7 @@ export default AIService;
 
 ---
 
-# Testing
+# 🧪 Testing
 
 ## Backend Tests
 
@@ -605,6 +605,23 @@ This project is licensed under the **MIT License**.
 - Email: support@resumeforge.com
 - GitHub Issues: Open an issue
 - OpenRouter Docs: https://openrouter.ai/docs
+
+---
+
+# 🙏 Acknowledgments
+
+Special thanks to:
+
+- OpenRouter
+- MongoDB
+- React
+- Vite
+- TailwindCSS
+- Stripe
+- OpenAI
+- Anthropic
+- Meta
+- Google
 
 ---
 

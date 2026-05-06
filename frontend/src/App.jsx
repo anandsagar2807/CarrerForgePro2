@@ -4,7 +4,7 @@ import { ClerkProvider } from '@clerk/react';
 import { ResumeProvider } from './context/ResumeContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AIToolsProvider } from './context/AIToolsContext';
-import Home from './pages/LandingPage';
+import Home from './pages/Home';
 import TemplatesPage from './pages/TemplatesPage';
 import Analyze from './pages/Analyze';
 import ResumeBuilderPage from './pages/ResumeBuilderPage';

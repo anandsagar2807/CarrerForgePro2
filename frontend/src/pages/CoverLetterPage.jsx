@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Sparkles, Home, Loader2, Copy, Download, MessageSquare, Search, LayoutGrid, CheckCircle } from 'lucide-react';
+import { FileText, Sparkles, Home, Loader2, Copy, Download, MessageSquare, Search, LayoutGrid, CheckCircle, Shield, Target } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { useResume } from '../context/ResumeContext';
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-
 const CoverLetterPage = () => {
+  console.log('CoverLetterPage mounting');
   const { resumeData } = useResume();
+  console.log('Resume Data:', resumeData);
   const [jobDescription, setJobDescription] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -18,41 +17,31 @@ const CoverLetterPage = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const tones = ['professional', 'conversational', 'enthusiastic', 'concise'];
+  const tones = [
+    { id: 'professional', label: 'Professional', icon: Shield },
+    { id: 'conversational', label: 'Conversational', icon: MessageSquare },
+    { id: 'enthusiastic', label: 'Enthusiastic', icon: Sparkles },
+    { id: 'concise', label: 'Concise', icon: Target },
+  ];
 
   const generateCoverLetter = async () => {
+    console.log('Generating cover letter...');
     if (!jobDescription.trim() || !jobTitle.trim()) return;
     setIsGenerating(true);
     try {
-      const resumeText = [
-        resumeData.personalInfo.fullName,
-        resumeData.personalInfo.summary,
-        ...resumeData.experience.map(e => `${e.position} at ${e.company}: ${e.description}`),
-        ...resumeData.skills.map(s => s.name),
-        ...resumeData.education.map(e => `${e.degree} in ${e.field} from ${e.institution}`),
-      ].join('. ');
-
-      if (GROQ_API_KEY) {
-        const response = await fetch(GROQ_API_URL, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'llama-3.1-70b-versatile',
-            messages: [
-              { role: 'system', content: `You are an expert cover letter writer. Generate a compelling ${tone} cover letter. Be tailored to the role, highlight relevant experience, show enthusiasm. 3-4 paragraphs. Return ONLY the cover letter text.` },
-              { role: 'user', content: `My Resume: ${resumeText}\n\nJob Title: ${jobTitle}\nCompany: ${companyName || 'the company'}\nJob Description: ${jobDescription}\n\nGenerate a ${tone} cover letter.` }
-            ],
-            temperature: 0.7, max_tokens: 1500
-          })
-        });
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-        setCoverLetter(data.choices[0]?.message?.content || 'Failed to generate.');
-      } else {
-        setCoverLetter(`Dear Hiring Manager,\n\nI am writing to express my strong interest in the ${jobTitle} position at ${companyName || 'your company'}. With my background in ${resumeData.skills.slice(0, 3).map(s => s.name).join(', ')} and experience as ${resumeData.experience[0]?.position || 'a professional'}, I am confident I would be a valuable addition to your team.\n\n${resumeData.personalInfo.summary || 'My professional experience has equipped me with the skills necessary to excel in this role.'}\n\nI would welcome the opportunity to discuss how my qualifications can contribute to ${companyName || 'your company'}'s continued success.\n\nBest regards,\n${resumeData.personalInfo.fullName || 'Your Name'}`);
-      }
+      const resumeText = JSON.stringify(resumeData);
+      
+      const response = await fetch('http://localhost:5000/api/ai/cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeText, jdText: jobDescription, tone })
+      });
+      
+      const data = await response.json();
+      console.log('API Response:', data);
+      setCoverLetter(data.coverLetter || data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error generating cover letter:', error);
       setCoverLetter('Failed to generate cover letter. Please try again.');
     } finally { setIsGenerating(false); }
   };
@@ -61,96 +50,179 @@ const CoverLetterPage = () => {
   const downloadCoverLetter = () => { const blob = new Blob([coverLetter], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `cover-letter-${companyName || 'draft'}.txt`; a.click(); URL.revokeObjectURL(url); };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#f4f0e8] via-[#fbf9f5] to-[#e8edf8]">
-      <Navbar />
-      <div className="bg-white/60 backdrop-blur-sm border-b border-[#e9dfcf]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link to="/" className="flex items-center gap-1.5 text-slate-500 hover:text-[#7d5f3f] transition-colors"><Home className="h-4 w-4" />Home</Link>
-            <span className="text-slate-300">/</span>
-            <span className="text-[#7d5f3f] font-semibold">Cover Letter Generator</span>
-          </nav>
-        </div>
-      </div>
-      <div className="bg-white/80 backdrop-blur-md border-b border-[#e9dfcf] shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3 flex-wrap">
-              <Link to="/templates" className="flex items-center gap-2 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors"><LayoutGrid className="h-4 w-4" />Templates</Link>
-              <Link to="/analyze" className="flex items-center gap-2 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors"><Search className="h-4 w-4" />ATS Analysis</Link>
-              <div className="flex items-center gap-2 bg-[#7d5f3f]/10 text-[#7d5f3f] px-3 py-1.5 rounded-lg text-sm font-semibold"><FileText className="h-4 w-4" />Cover Letter</div>
-            </div>
-            <Link to="/chat" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-[#7d5f3f] transition-colors px-3 py-2 rounded-lg hover:bg-[#7d5f3f]/5"><MessageSquare className="h-4 w-4" />AI Assistant</Link>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 overflow-x-hidden">
+      {/* Premium Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[120px]" />
       </div>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-[#7d5f3f]/10 text-[#7d5f3f] px-4 py-2 rounded-full text-sm font-semibold mb-4"><Sparkles className="h-4 w-4" />AI-Powered</div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">Cover Letter Generator</h1>
-          <p className="text-slate-600 max-w-2xl mx-auto">Generate a tailored, professional cover letter using your resume data and the job description.</p>
-        </div>
+      <Navbar isDark={true} />
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <div className="bg-white/90 rounded-2xl p-6 border border-[#e8dcc8] shadow-lg shadow-slate-200/50">
-              <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2"><FileText className="h-5 w-5 text-[#7d5f3f]" />Job Details</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Job Title *</label>
-                  <input type="text" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="e.g. Senior Software Engineer" className="w-full px-4 py-2.5 border border-[#dfd2be] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Company Name</label>
-                  <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="e.g. Google" className="w-full px-4 py-2.5 border border-[#dfd2be] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Job Description *</label>
-                  <textarea value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} placeholder="Paste the job description here..." rows={6} className="w-full px-4 py-2.5 border border-[#dfd2be] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-sm resize-none" />
-                </div>
-              </div>
-            </div>
-            <div className="bg-white/90 rounded-2xl p-6 border border-[#e8dcc8] shadow-lg shadow-slate-200/50">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">Tone</h2>
-              <div className="grid grid-cols-2 gap-3">
-                {tones.map((t) => (
-                  <button key={t} onClick={() => setTone(t)} className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${tone === t ? 'bg-[#7d5f3f] text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
-                    {t.charAt(0).toUpperCase() + t.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <button onClick={generateCoverLetter} disabled={isGenerating || !jobTitle.trim() || !jobDescription.trim()} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3.5 px-6 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-              {isGenerating ? <><Loader2 className="h-5 w-5 animate-spin" />Generating...</> : <><Sparkles className="h-5 w-5" />Generate Cover Letter</>}
-            </button>
+      <main className="pt-32 pb-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          {/* Header */}
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-5 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-8"
+            >
+              <FileText className="w-4 h-4 text-blue-400" />
+              <span className="text-sm font-bold text-blue-100 uppercase tracking-widest">AI Letter Architect</span>
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter"
+            >
+              Tailored <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Cover Letters</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-slate-400 font-medium"
+            >
+              Generate high-conversion cover letters that perfectly align your experience with any job description.
+            </motion.p>
           </div>
 
-          <div className="space-y-4">
-            <div className="bg-white/90 rounded-2xl p-6 border border-[#e8dcc8] shadow-lg shadow-slate-200/50 min-h-[400px] flex flex-col">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-slate-900">Your Cover Letter</h2>
-                {coverLetter && (
-                  <div className="flex items-center gap-2">
-                    <button onClick={copyToClipboard} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-200 transition-colors">
-                      {copied ? <CheckCircle className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}{copied ? 'Copied!' : 'Copy'}
-                    </button>
-                    <button onClick={downloadCoverLetter} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-200 transition-colors">
-                      <Download className="h-3.5 w-3.5" />Download
-                    </button>
+          <div className="grid lg:grid-cols-5 gap-12 items-start">
+            {/* Input Side */}
+            <div className="lg:col-span-2 space-y-8">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl"
+              >
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Job Title</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Senior Software Engineer"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500 transition-colors"
+                      value={jobTitle}
+                      onChange={(e) => setJobTitle(e.target.value)}
+                    />
                   </div>
-                )}
-              </div>
-              {coverLetter ? (
-                <div className="flex-1 whitespace-pre-wrap text-sm text-slate-700 leading-relaxed overflow-auto">{coverLetter}</div>
-              ) : (
-                <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">Your generated cover letter will appear here</div>
-              )}
+                  <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Company Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Google"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500 transition-colors"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Job Description</label>
+                    <textarea
+                      rows={6}
+                      placeholder="Paste the job description here for best results..."
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                      value={jobDescription}
+                      onChange={(e) => setJobDescription(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Letter Tone</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {tones.map((t) => (
+                        <button
+                          key={t.id}
+                          onClick={() => setTone(t.id)}
+                          className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all duration-300 ${
+                            tone === t.id
+                              ? 'bg-blue-600 border-blue-500 text-white shadow-lg'
+                              : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                          }`}
+                        >
+                          <t.icon size={16} />
+                          <span className="text-xs font-bold">{t.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={generateCoverLetter}
+                    disabled={isGenerating || !jobTitle || !jobDescription}
+                    className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-600 disabled:from-slate-700 disabled:to-slate-800 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20 flex items-center justify-center gap-3 transition-all"
+                  >
+                    {isGenerating ? (
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                    ) : (
+                      <>
+                        <Sparkles size={20} />
+                        Generate Masterpiece
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Output Side */}
+            <div className="lg:col-span-3">
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-1 shadow-2xl overflow-hidden h-full min-h-[600px] flex flex-col"
+              >
+                <div className="bg-white/5 border-b border-white/10 px-8 py-6 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Cover Letter Preview</div>
+                  <div className="flex items-center gap-4">
+                    {coverLetter && (
+                      <>
+                        <button onClick={copyToClipboard} className="text-slate-400 hover:text-white transition-colors">
+                          {copied ? <CheckCircle size={18} className="text-green-400" /> : <Copy size={18} />}
+                        </button>
+                        <button onClick={downloadCoverLetter} className="text-slate-400 hover:text-white transition-colors">
+                          <Download size={18} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex-grow p-10 overflow-y-auto custom-scrollbar">
+                  {coverLetter ? (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-slate-300 font-medium leading-[1.8] whitespace-pre-wrap text-lg"
+                    >
+                      {coverLetter}
+                    </motion.div>
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-40">
+                      <div className="w-20 h-20 rounded-3xl border-2 border-dashed border-slate-500 flex items-center justify-center">
+                        <FileText size={32} className="text-slate-500" />
+                      </div>
+                      <div>
+                        <p className="text-xl font-bold text-white mb-2">Ready to Build</p>
+                        <p className="text-slate-400 max-w-xs mx-auto">Fill in the job details and let AI architect your next big opportunity.</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

@@ -2,38 +2,32 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/react';
-import { ArrowRight, CheckCircle, TrendingUp, Star, Users } from 'lucide-react';
+import { ArrowRight, TrendingUp, Star } from 'lucide-react';
 
 const Hero = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
 
   return (
-    <section className="relative overflow-hidden bg-white">
-      {/* Subtle background gradients */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 -right-20 w-[500px] h-[500px] bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 -left-20 w-[400px] h-[400px] bg-gradient-to-tr from-purple-50 to-blue-50 rounded-full blur-3xl" />
-      </div>
-
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       <div className="section-container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-screen py-12 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-12 lg:py-20">
 
           {/* Left Column - Content */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center text-left">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full mb-8 w-fit"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-8 w-fit backdrop-blur-sm"
             >
-              <span className="text-sm font-semibold text-blue-700">
-                #1 Resume Builder Platform
+              <span className="text-sm font-semibold text-blue-400">
+                #1 AI-Powered Resume Builder
               </span>
-              <div className="flex items-center gap-1 ml-2 px-2 py-0.5 bg-white rounded-full border border-blue-100">
-                <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-                <span className="text-xs font-bold text-slate-700">4.9/5</span>
+              <div className="flex items-center gap-1 ml-2 px-2 py-0.5 bg-blue-500/20 rounded-full border border-blue-400/30">
+                <Star className="h-3 w-3 text-blue-400 fill-blue-400" />
+                <span className="text-xs font-bold text-blue-100">4.9/5</span>
               </div>
             </motion.div>
 
@@ -42,11 +36,11 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight tracking-tight"
+              className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight"
             >
-              Land Your Dream Job with{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                AI-Powered Resumes
+              Master the ATS with{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 animate-gradient-x">
+                Precision AI.
               </span>
             </motion.h1>
 
@@ -55,13 +49,9 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed"
+              className="text-xl md:text-2xl text-slate-400 mb-10 leading-relaxed max-w-2xl"
             >
-              Create ATS-optimized resumes in minutes using advanced technology.{' '}
-              <span className="font-semibold text-slate-900">
-                Trusted by 50,000+ professionals
-              </span>
-              {' '}who landed interviews at top companies.
+              Build high-impact, ATS-optimized resumes in seconds. Powered by <span className="text-white font-medium">Gemini 2.0</span> to decode job descriptions and match your skills perfectly.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -69,261 +59,121 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 mb-10"
+              className="flex flex-col sm:flex-row gap-5 mb-12"
             >
               <button
                 onClick={() => navigate(isSignedIn ? '/templates' : '/sign-up')}
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02]"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 text-white font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-blue-500 hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(37,99,235,0.4)]"
               >
-                Start Building Free
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                Start Building Now
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
                 onClick={() => navigate('/analyze')}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-slate-700 font-semibold rounded-xl border-2 border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/5 text-white font-semibold rounded-xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-md"
               >
-                <TrendingUp className="h-5 w-5 text-blue-600" />
-                ATS Score
+                <TrendingUp className="h-5 w-5 text-blue-400" />
+                Check ATS Score
               </button>
             </motion.div>
 
             {/* Trust Stats */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-wrap items-center gap-6 md:gap-8"
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-500 fill-yellow-500 -ml-0.5 first:ml-0" />
-                  ))}
-                </div>
-                <div>
-                  <span className="font-bold text-slate-900 text-sm">4.9/5</span>
-                  <span className="text-slate-500 text-sm ml-1">(2,847 reviews)</span>
-                </div>
-              </div>
-
-              <div className="h-8 w-px bg-slate-200" />
-
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-600" />
-                <div>
-                  <span className="font-bold text-slate-900 text-sm">50,000+</span>
-                  <span className="text-slate-500 text-sm ml-1">Users</span>
-                </div>
-              </div>
-
-              <div className="h-8 w-px bg-slate-200" />
-
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-green-600" />
-                <div>
-                  <span className="font-bold text-slate-900 text-sm">92%</span>
-                  <span className="text-slate-500 text-sm ml-1">ATS Pass Rate</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Trust Indicators */}
-            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap items-center gap-6 mt-8"
+              transition={{ duration: 1, delay: 0.5 }}
+              className="flex flex-wrap items-center gap-8 text-slate-500 border-t border-white/5 pt-8"
             >
-              {[
-                { icon: <CheckCircle className="h-5 w-5" />, text: "No credit card", color: "text-green-600" },
-                { icon: <CheckCircle className="h-5 w-5" />, text: "Students & Professionals", color: "text-blue-600" },
-                { icon: <CheckCircle className="h-5 w-5" />, text: "Privacy Protected", color: "text-indigo-600" }
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-slate-600">
-                  <div className={item.color}>{item.icon}</div>
-                  <span className="text-sm font-medium">{item.text}</span>
-                </div>
-              ))}
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-white">50k+</span>
+                <span className="text-sm">Active Users</span>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-white">92%</span>
+                <span className="text-sm">Success Rate</span>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-white">24/7</span>
+                <span className="text-sm">AI Support</span>
+              </div>
             </motion.div>
           </div>
 
           {/* Right Column - Product Mockup */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="relative hidden lg:block"
           >
-            {/* Main Resume Preview */}
-            <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+            {/* Glow effect behind the mockup */}
+            <div className="absolute -inset-4 bg-blue-500/20 rounded-[2.5rem] blur-3xl" />
+            
+            <div className="relative bg-[#0f172a] rounded-3xl shadow-2xl border border-white/10 overflow-hidden backdrop-blur-xl">
               {/* Browser Header */}
-              <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-400" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                  <div className="w-3 h-3 rounded-full bg-green-400" />
+              <div className="bg-white/5 px-6 py-4 border-b border-white/10 flex items-center justify-between">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/50" />
                 </div>
-                <div className="flex-1 flex justify-center">
-                  <div className="px-4 py-1 bg-white rounded-lg text-xs text-slate-500 font-medium border border-slate-200">
-                    resumeforge.pro/builder
-                  </div>
+                <div className="flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-[10px] text-blue-400 font-medium uppercase tracking-widest">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                  AI Optimization Active
                 </div>
               </div>
 
-              {/* Resume Content */}
-              <div className="p-6 md:p-8 bg-gradient-to-br from-slate-50 to-white">
-                <div className="grid md:grid-cols-3 gap-6">
-                  {/* Resume Preview */}
-                  <div className="md:col-span-2">
-                    <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
-                      <div className="flex justify-between items-start mb-6">
-                        <div>
-                          <h3 className="text-xl font-bold text-slate-900 mb-1">Alex Johnson</h3>
-                          <p className="text-sm text-blue-600 font-semibold">Senior Software Engineer</p>
-                        </div>
-                        <div className="text-xs text-slate-500 text-right">
-                          alex.johnson@email.com<br />
-                          San Francisco, CA
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Experience</h4>
-                          <div className="space-y-2">
-                            <div className="h-2 bg-slate-100 rounded-full w-full" />
-                            <div className="h-2 bg-slate-100 rounded-full w-11/12" />
-                            <div className="h-2 bg-slate-100 rounded-full w-4/5" />
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Skills</h4>
-                          <div className="flex flex-wrap gap-2">
-                            <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">React</div>
-                            <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Node.js</div>
-                            <div className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">AWS</div>
-                            <div className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">Python</div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Education</h4>
-                          <div className="h-2 bg-slate-100 rounded-full w-3/4" />
-                        </div>
-                      </div>
-                    </div>
+              {/* Resume Content Mockup */}
+              <div className="p-8 space-y-8">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-3">
+                    <div className="h-8 w-48 bg-white/10 rounded-lg animate-pulse" />
+                    <div className="h-4 w-32 bg-blue-400/20 rounded-md" />
                   </div>
+                  <div className="h-12 w-12 bg-white/5 rounded-full border border-white/10" />
+                </div>
 
-                  {/* ATS Score & Suggestions */}
-                  <div className="space-y-4">
-                    {/* ATS Score Card */}
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 border border-green-200">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-bold text-slate-700 uppercase">ATS Score</span>
-                        <CheckCircle className="h-5 w-5 text-green-600" />
-                      </div>
-                      <div className="text-4xl font-bold text-green-600 mb-2">94%</div>
-                      <div className="h-2 bg-green-200 rounded-full overflow-hidden mb-2">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: "94%" }}
-                          transition={{ duration: 1.5, delay: 1 }}
-                          className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
-                        />
-                      </div>
-                      <p className="text-xs text-slate-600 font-medium">Excellent! Ready for top companies</p>
-                    </div>
-
-                    {/* Job Match Card */}
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
-                      <div className="flex items-center gap-2 mb-3">
-                        <TrendingUp className="h-4 w-4 text-blue-600" />
-                        <span className="text-xs font-bold text-slate-700 uppercase">Job Match</span>
-                      </div>
-                      <div className="text-3xl font-bold text-blue-600 mb-1">88%</div>
-                      <p className="text-xs text-slate-600">Matching: Senior Dev at Google</p>
-                    </div>
-
-                    {/* AI Suggestions */}
-                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">AI</span>
-                        </div>
-                        <span className="text-xs font-bold text-slate-700">Suggestions</span>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-start gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-xs text-slate-600">Keywords optimized</span>
-                        </div>
-                        <div className="flex items-start gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-xs text-slate-600">Format ATS-friendly</span>
-                        </div>
-                        <div className="flex items-start gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-xs text-slate-600">Action verbs added</span>
-                        </div>
-                      </div>
-                    </div>
+                <div className="space-y-4">
+                  <div className="h-4 w-24 bg-white/20 rounded-md" />
+                  <div className="space-y-3">
+                    <div className="h-3 w-full bg-white/5 rounded-full" />
+                    <div className="h-3 w-full bg-white/5 rounded-full" />
+                    <div className="h-3 w-3/4 bg-white/5 rounded-full" />
                   </div>
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div className="text-[10px] text-slate-500 uppercase mb-2">ATS Score</div>
+                    <div className="text-3xl font-bold text-blue-400">98%</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div className="text-[10px] text-slate-500 uppercase mb-2">Keywords</div>
+                    <div className="text-3xl font-bold text-indigo-400">24+</div>
+                  </div>
+                </div>
+
+                {/* AI Floating Suggestion */}
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute bottom-12 -left-12 p-4 bg-blue-600 rounded-2xl shadow-2xl border border-blue-400/30 flex items-center gap-3 backdrop-blur-lg"
+                >
+                  <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white">Bullet Optimized!</div>
+                    <div className="text-[10px] text-blue-100 opacity-80">XYZ formula applied</div>
+                  </div>
+                </motion.div>
               </div>
             </div>
-
-            {/* Floating Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl border border-slate-200 p-4 hidden lg:block"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-500 font-medium">Interview Rate</div>
-                  <div className="text-lg font-bold text-slate-900">+48%</div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.2 }}
-              className="absolute -top-6 -right-6 bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-xl shadow-xl p-4 hidden lg:block"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold">LIVE PREVIEW</span>
-              </div>
-              <p className="text-xs opacity-90">Real-time editing</p>
-            </motion.div>
           </motion.div>
         </div>
-
-        {/* Company Logos Strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="border-t border-slate-200 pt-12 pb-8 mt-12"
-        >
-          <p className="text-center text-sm font-semibold text-slate-400 uppercase tracking-wider mb-8">
-            Trusted by professionals from
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
-            {['Google', 'Microsoft', 'Amazon', 'Meta', 'Apple', 'Netflix'].map((company) => (
-              <div key={company} className="text-xl md:text-2xl font-bold text-slate-300">
-                {company}
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

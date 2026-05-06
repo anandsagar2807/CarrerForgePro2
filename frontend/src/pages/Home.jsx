@@ -21,17 +21,18 @@ import {
 const AnimatedBackground = () => (
   <div className="absolute inset-0 overflow-hidden">
     {/* Base gradient */}
-    <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30" />
+    <div className="absolute inset-0 bg-[#020617]" />
 
-    {/* Subtle mesh gradient - no animated orbs */}
-    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-100/40 to-blue-200/20 rounded-full blur-3xl" />
-    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-50/30 to-slate-100/20 rounded-full blur-3xl" />
+    {/* Dynamic orbs */}
+    <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
+    <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+    <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-violet-600/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '4s' }} />
 
     {/* Subtle grid pattern */}
     <div
-      className="absolute inset-0 opacity-[0.02]"
+      className="absolute inset-0 opacity-[0.05]"
       style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h98v98H1z' fill='none' stroke='%231e40af' stroke-width='0.5'/%3E%3C/svg%3E")`,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 60H0V0h60v60zM1 59h58V1H1v58z' fill='white' fill-opacity='0.1'/%3E%3C/svg%3E")`,
       }}
     />
   </div>
@@ -82,7 +83,7 @@ const ProductShowcase = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-24 lg:py-32 relative overflow-hidden">
+    <section className="py-24 lg:py-32 relative overflow-hidden bg-[#020617]">
       <div className="section-container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}
@@ -92,20 +93,20 @@ const ProductShowcase = () => {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full">
-              <Play className="w-4 h-4 text-blue-700" />
-              <span className="text-sm font-bold text-blue-900">See It In Action</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full">
+              <Play className="w-4 h-4 text-blue-400" />
+              <span className="text-sm font-bold text-blue-100">See It In Action</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
               Create stunning resumes
               <br />
-              <span className="text-blue-800">
+              <span className="text-blue-500">
                 in minutes, not hours
               </span>
             </h2>
 
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-xl text-slate-400 leading-relaxed">
               Our intuitive builder, combined with AI-powered suggestions,
               makes creating a professional resume faster than ever before.
             </p>
@@ -124,10 +125,10 @@ const ProductShowcase = () => {
                   transition={{ delay: i * 0.1 }}
                   className="flex items-center gap-4"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-700 to-blue-900 rounded-xl flex items-center justify-center shadow-md">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-lg font-semibold text-slate-700">{item.text}</span>
+                  <span className="text-lg font-semibold text-slate-300">{item.text}</span>
                 </motion.li>
               ))}
             </ul>
@@ -135,8 +136,8 @@ const ProductShowcase = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => navigate('/sign-up')}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-700 to-blue-900 text-white font-bold rounded-2xl hover:shadow-xl transition-all shadow-lg"
+              onClick={() => navigate('/templates')}
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-2xl hover:shadow-xl transition-all shadow-lg"
             >
               Try Builder Free
               <ArrowRight className="w-5 h-5" />
@@ -151,16 +152,16 @@ const ProductShowcase = () => {
             transition={{ delay: 0.2 }}
             className="relative"
           >
-            <div className="absolute -inset-4 bg-gradient-to-r from-blue-200/30 to-blue-300/20 rounded-3xl blur-2xl" />
-            <div className="relative bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-3xl blur-2xl" />
+            <div className="relative bg-[#0f172a] rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
               {/* Mock UI Header */}
-              <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+              <div className="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center gap-3">
                 <div className="flex gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-400" />
                   <div className="w-3 h-3 rounded-full bg-yellow-400" />
                   <div className="w-3 h-3 rounded-full bg-green-400" />
                 </div>
-                <div className="flex-1 text-center text-sm font-medium text-slate-400">
+                <div className="flex-1 text-center text-sm font-medium text-slate-500">
                   ResumeForge Pro Editor
                 </div>
               </div>
@@ -168,24 +169,24 @@ const ProductShowcase = () => {
               {/* Mock Content */}
               <div className="p-8 space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl flex items-center justify-center text-white font-bold text-xl">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl">
                     JD
                   </div>
                   <div className="flex-1">
-                    <div className="h-6 bg-slate-100 rounded w-48 mb-2" />
-                    <div className="h-4 bg-slate-100 rounded w-32" />
+                    <div className="h-6 bg-white/5 rounded w-48 mb-2" />
+                    <div className="h-4 bg-white/5 rounded w-32" />
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="h-3 bg-slate-100 rounded w-full" />
-                  <div className="h-3 bg-slate-100 rounded w-11/12" />
-                  <div className="h-3 bg-slate-100 rounded w-10/12" />
+                  <div className="h-3 bg-white/5 rounded w-full" />
+                  <div className="h-3 bg-white/5 rounded w-11/12" />
+                  <div className="h-3 bg-white/5 rounded w-10/12" />
                 </div>
 
                 <div className="flex gap-2">
                   {['React', 'TypeScript', 'Node.js'].map((tag) => (
-                    <span key={tag} className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-semibold rounded-lg">
+                    <span key={tag} className="px-3 py-1.5 bg-blue-500/10 text-blue-400 text-xs font-semibold rounded-lg border border-blue-500/10">
                       {tag}
                     </span>
                   ))}
@@ -197,18 +198,18 @@ const ProductShowcase = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.5 }}
-                  className="bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-lg"
+                  className="bg-[#1e293b] border border-blue-500/30 rounded-xl p-5 shadow-2xl"
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-700 to-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-4 h-4 text-white" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+                      <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-900 mb-1">AI Suggestion</p>
-                      <p className="text-sm text-slate-600">"Led cross-functional team of 8 engineers to deliver product 2 weeks ahead of schedule"</p>
-                      <div className="flex gap-2 mt-3">
-                        <button className="px-3 py-1 bg-blue-700 text-white text-xs font-semibold rounded-lg">Apply</button>
-                        <button className="px-3 py-1 text-slate-500 text-xs font-semibold">Dismiss</button>
+                      <p className="text-sm font-bold text-white mb-1">AI Suggestion</p>
+                      <p className="text-sm text-slate-400 leading-relaxed italic">"Led cross-functional team of 8 engineers to deliver product 2 weeks ahead of schedule"</p>
+                      <div className="flex gap-3 mt-4">
+                        <button className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-lg shadow-blue-500/20">Apply</button>
+                        <button className="px-4 py-1.5 text-slate-500 text-xs font-bold hover:text-slate-300 transition-colors">Dismiss</button>
                       </div>
                     </div>
                   </div>
@@ -232,10 +233,10 @@ const StatsBar = () => {
   ];
 
   return (
-    <section className="py-16 relative">
+    <section className="py-16 relative bg-[#020617]">
       <div className="section-container">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 lg:p-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-2xl p-10 lg:p-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -243,13 +244,13 @@ const StatsBar = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="text-center"
+                className="text-center group"
               >
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-50 rounded-2xl mb-4">
-                  <stat.icon className="w-7 h-7 text-blue-700" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500/10 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <stat.icon className="w-8 h-8 text-blue-400" />
                 </div>
-                <p className="text-4xl font-bold text-slate-900 mb-1">{stat.value}</p>
-                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
+                <p className="text-4xl lg:text-5xl font-black text-white mb-2 tracking-tighter">{stat.value}</p>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -456,7 +457,7 @@ const AIToolsCTA = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/sign-up')}
+            onClick={() => navigate('/ai-tools')}
             className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 font-bold rounded-2xl hover:bg-slate-100 transition-all duration-300 shadow-xl"
           >
             Explore AI Tools
@@ -473,8 +474,8 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white font-sans overflow-x-hidden">
-      <Navbar />
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-sans overflow-x-hidden">
+      <Navbar isDark={true} />
 
       <main>
         {/* HERO SECTION */}
@@ -495,23 +496,23 @@ const Home = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full shadow-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full shadow-sm"
                 >
-                  <Sparkles className="w-4 h-4 text-blue-700" />
-                  <span className="text-sm font-bold text-blue-900">
+                  <Sparkles className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-bold text-blue-100">
                     AI-Powered Resume Builder
                   </span>
                 </motion.div>
 
                 {/* Headline */}
                 <div className="space-y-4">
-                  <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 leading-[1.05] tracking-tight">
+                  <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] tracking-tight">
                     Build a resume that{' '}
-                    <span className="text-blue-800">
+                    <span className="text-blue-400">
                       gets callbacks
                     </span>
                   </h1>
-                  <p className="text-xl text-slate-600 max-w-xl leading-relaxed">
+                  <p className="text-xl text-slate-300 max-w-xl leading-relaxed">
                     Professional AI-powered tools to create resumes that stand out and get results.
                   </p>
                 </div>
@@ -521,8 +522,8 @@ const Home = () => {
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate('/sign-up')}
-                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-700 to-blue-900 text-white text-base font-bold rounded-2xl shadow-xl shadow-blue-900/20 transition-all duration-300"
+                    onClick={() => navigate('/templates')}
+                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-base font-bold rounded-2xl shadow-xl shadow-blue-500/20 transition-all duration-300"
                   >
                     Start Building Free
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -530,8 +531,8 @@ const Home = () => {
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate('/sign-up')}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 text-base font-semibold rounded-2xl border-2 border-slate-200 hover:border-blue-800 hover:bg-slate-50 transition-all duration-300"
+                    onClick={() => navigate('/analyze')}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 text-white text-base font-semibold rounded-2xl border border-white/10 hover:border-blue-500 hover:bg-white/10 transition-all duration-300"
                   >
                     <Shield className="w-5 h-5 text-slate-400" />
                     Check ATS Score
@@ -541,7 +542,12 @@ const Home = () => {
                 {/* Benefits */}
                 <div className="flex flex-wrap gap-3">
                   {['No credit card', 'Free templates', 'ATS-optimized'].map((text) => (
-                    <BenefitPill key={text} text={text} />
+                    <div key={text} className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 shadow-sm">
+                      <div className="w-5 h-5 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <Check className="w-3 h-3 text-green-400" />
+                      </div>
+                      <span className="text-sm font-semibold text-slate-200">{text}</span>
+                    </div>
                   ))}
                 </div>
 
@@ -550,14 +556,14 @@ const Home = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.8 }}
-                  className="pt-6 border-t border-slate-200/60"
+                  className="pt-6 border-t border-white/10"
                 >
                   <div className="flex items-center gap-2">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                     ))}
-                    <span className="ml-2 text-sm font-bold text-slate-900">4.9/5</span>
-                    <span className="text-sm text-slate-500">from 50,000+ users</span>
+                    <span className="ml-2 text-sm font-bold text-white">4.9/5</span>
+                    <span className="text-sm text-slate-400">from 50,000+ users</span>
                   </div>
                 </motion.div>
               </motion.div>

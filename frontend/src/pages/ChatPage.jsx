@@ -5,18 +5,8 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useResume } from '../context/ResumeContext';
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-
-const SYSTEM_PROMPT = `You are ResumeForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidance, cover letters, and skill development.
-
-IMPORTANT RULES:
-- Write like a friendly human career advisor, not a bot
-- Never use asterisks (*) or markdown formatting in your responses
-- Use natural conversational language
-- Be concise, actionable, and warm
-- Use line breaks for readability, but no special formatting characters
-- Speak directly to the user as if you're having a conversation`;
+import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const suggestedQuestions = [
   "How can I make my resume stand out?",
@@ -30,14 +20,13 @@ const suggestedQuestions = [
 const ChatPage = () => {
   const { resumeData } = useResume();
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I'm your ResumeForge AI Assistant. I can help with resume writing, ATS optimization, interview prep, and career advice. What would you like to know?" }
+    { role: 'assistant', content: "Hi! I'm your Zaalima Forge AI Assistant. I'm powered by Gemini 2.0 to help you with resume writing, ATS optimization, and career advice. What would you like to know?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    // Only scroll to bottom of messages, not to top of page
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
@@ -52,33 +41,23 @@ const ChatPage = () => {
 
     try {
       const resumeContext = resumeData?.personalInfo?.fullName
-        ? `\n\nUser's resume: Name: ${resumeData.personalInfo.fullName}, Skills: ${resumeData.skills?.map(s => s.name).join(', ') || 'N/A'}, Experience: ${resumeData.experience?.map(e => `${e.position} at ${e.company}`).join(', ') || 'N/A'}`
+        ? `User's resume: Name: ${resumeData.personalInfo.fullName}, Skills: ${resumeData.skills?.map(s => s.name).join(', ') || 'N/A'}, Experience: ${resumeData.experience?.map(e => `${e.position} at ${e.company}`).join(', ') || 'N/A'}`
         : '';
 
-      if (GROQ_API_KEY) {
-        const apiMessages = [
-          { role: 'system', content: SYSTEM_PROMPT + resumeContext },
-          ...messages.filter(m => m.role === 'user' || m.role === 'assistant').slice(-10),
-          userMessage
-        ];
-        const response = await fetch(GROQ_API_URL, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: apiMessages, temperature: 0.7, max_tokens: 1000 })
-        });
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-        let aiResponse = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
-        // Remove asterisks and markdown formatting
-        aiResponse = aiResponse.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#{1,6}\s/g, '');
-        setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
-      } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: "I'd be happy to help! Please configure the VITE_GROQ_API_KEY in your .env file to enable AI-powered responses.\n\nIn the meantime, here are some quick tips:\n\n1. Tailor your resume to each job\n2. Use action verbs for bullet points\n3. Quantify achievements with numbers\n4. Keep it concise - 1-2 pages\n5. Use ATS-friendly formatting" }]);
-      }
+      const response = await axios.post(`${API_BASE_URL}/ai/chat`, {
+        message: text.trim(),
+        chatHistory: messages.slice(-10),
+        resumeContext
+      });
+
+      const aiResponse = response.data.reply || 'Sorry, I could not generate a response.';
+      setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
     } catch (error) {
       console.error('Chat error:', error);
       setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
-    } finally { setIsLoading(false); }
+    } finally { 
+      setIsLoading(false); 
+    }
   };
 
   const handleKeyDown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } };

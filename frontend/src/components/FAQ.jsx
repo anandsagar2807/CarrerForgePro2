@@ -44,23 +44,23 @@ const FAQItem = ({ faq, index, isOpen, onToggle }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="border-b border-slate-200 last:border-b-0"
+      className="border-b border-white/5 last:border-b-0"
     >
       <button
         onClick={onToggle}
-        className="w-full py-6 flex items-center justify-between text-left group"
+        className="w-full py-8 flex items-center justify-between text-left group"
       >
-        <span className="text-lg font-semibold text-slate-900 pr-8 group-hover:text-blue-600 transition-colors">
+        <span className={`text-xl font-bold tracking-tight transition-all duration-300 ${isOpen ? 'text-white' : 'text-slate-400 group-hover:text-blue-400'}`}>
           {faq.question}
         </span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
-          className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-            isOpen ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-700'
+          className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 border ${
+            isOpen ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'bg-white/5 border-white/5 text-slate-500 group-hover:border-blue-500/30 group-hover:text-blue-400'
           }`}
         >
-          <ChevronDown className="w-5 h-5" />
+          <ChevronDown className="w-6 h-6" />
         </motion.div>
       </button>
       
@@ -70,10 +70,10 @@ const FAQItem = ({ faq, index, isOpen, onToggle }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <p className="pb-6 text-slate-600 leading-relaxed">
+            <p className="pb-8 text-slate-400 leading-relaxed font-medium text-lg max-w-2xl">
               {faq.answer}
             </p>
           </motion.div>
@@ -87,22 +87,19 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="py-24 lg:py-32 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-      
-      <div className="section-container">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+    <section id="faq" className="py-24 lg:py-32 relative overflow-hidden bg-[#020617]">
+      <div className="section-container relative z-10">
+        <div className="grid lg:grid-cols-2 gap-20 lg:gap-32">
           {/* Left Column - Header */}
           <div className="lg:sticky lg:top-32 lg:self-start">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-full mb-6"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-8"
             >
-              <HelpCircle className="w-4 h-4 text-slate-500" />
-              <span className="text-sm font-semibold text-slate-700">FAQ</span>
+              <HelpCircle className="w-4 h-4 text-blue-400" />
+              <span className="text-sm font-bold text-blue-100 uppercase tracking-widest">Help Center</span>
             </motion.div>
             
             <motion.h2
@@ -110,13 +107,10 @@ const FAQ = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight"
+              className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter"
             >
-              Frequently asked
-              <br />
-              <span className="text-blue-800">
-                questions
-              </span>
+              Frequently Asked <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Questions</span>
             </motion.h2>
             
             <motion.p
@@ -124,47 +118,37 @@ const FAQ = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-slate-500 mb-8"
+              className="text-xl text-slate-400 font-medium max-w-md leading-relaxed"
             >
-              Everything you need to know about ResumeForge Pro. Can't find what you're looking for? Contact our support team.
+              Got questions? We've got answers. If you don't find what you're looking for, 
+              feel free to contact our 24/7 support team.
             </motion.p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="p-6 bg-blue-50 rounded-2xl border border-blue-100"
+              className="mt-12 p-8 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10"
             >
-              <p className="text-sm font-semibold text-slate-900 mb-2">Still have questions?</p>
-              <p className="text-sm text-slate-600 mb-4">
-                Can't find the answer you're looking for? Please chat with our friendly team.
-              </p>
-              <a
-                href="mailto:support@resumeforge.pro"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 transition-colors"
-              >
+              <p className="text-white font-bold mb-4">Still have questions?</p>
+              <button className="px-8 py-4 bg-white text-slate-900 font-bold rounded-2xl hover:bg-blue-50 transition-all active:scale-95 shadow-xl">
                 Contact Support
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
+              </button>
             </motion.div>
           </div>
 
           {/* Right Column - FAQ Items */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-2 shadow-xl">
-            <div className="divide-y divide-slate-100 px-6">
-              {faqs.map((faq, index) => (
-                <FAQItem
-                  key={index}
-                  faq={faq}
-                  index={index}
-                  isOpen={openIndex === index}
-                  onToggle={() => setOpenIndex(openIndex === index ? -1 : index)}
-                />
-              ))}
-            </div>
+          <div className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/10">
+            {faqs.map((faq, index) => (
+              <FAQItem
+                key={index}
+                faq={faq}
+                index={index}
+                isOpen={openIndex === index}
+                onToggle={() => setOpenIndex(openIndex === index ? -1 : index)}
+              />
+            ))}
           </div>
         </div>
       </div>
