@@ -361,33 +361,6 @@ const MODELS = {
 }
 ```
 
----
-
-# 🚦 Rate Limiting
-
-```javascript
-AI_REQUESTS_PER_MINUTE=30
-AI_REQUESTS_PER_DAY=1000
-```
-
----
-
-# 📊 Usage Tracking Example
-
-```json
-{
-  "model": "openai/gpt-3.5-turbo",
-  "prompt_tokens": 150,
-  "completion_tokens": 200,
-  "total_tokens": 350,
-  "cost_usd": 0.0007
-}
-```
-
----
-
-# 🚀 Deployment
-
 # Production Checklist
 
 - ✅ Strong JWT Secret
@@ -547,18 +520,6 @@ https://openrouter.ai/activity
 
 ---
 
-# Issue: Model Not Available
-
-### Solution
-
-Use available fallback models.
-
-```txt
-https://openrouter.ai/models
-```
-
----
-
 # 🤝 Contributing
 
 1. Fork the repository
@@ -595,33 +556,6 @@ git push origin feature/AmazingFeature
 # 📜 License
 
 This project is licensed under the **MIT License**.
-
----
-
-# 📞 Support
-
-## Contact
-
-- Email: support@resumeforge.com
-- GitHub Issues: Open an issue
-- OpenRouter Docs: https://openrouter.ai/docs
-
----
-
-# 🙏 Acknowledgments
-
-Special thanks to:
-
-- OpenRouter
-- MongoDB
-- React
-- Vite
-- TailwindCSS
-- Stripe
-- OpenAI
-- Anthropic
-- Meta
-- Google
 
 ---
 
