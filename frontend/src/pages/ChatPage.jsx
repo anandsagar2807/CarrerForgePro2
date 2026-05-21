@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MessageSquare, Home, Send, Loader2, Sparkles, FileText, Search, LayoutGrid, Bot, User, Trash2 } from 'lucide-react';
+import { useUser } from '@clerk/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useResume } from '../context/ResumeContext';
@@ -8,7 +9,7 @@ import { useResume } from '../context/ResumeContext';
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-const SYSTEM_PROMPT = `You are ResumeForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidance, cover letters, and skill development.
+const SYSTEM_PROMPT = `You are CareerForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidance, cover letters, and skill development.
 
 IMPORTANT RULES:
 - Write like a friendly human career advisor, not a bot
@@ -28,13 +29,30 @@ const suggestedQuestions = [
 ];
 
 const ChatPage = () => {
+  const { isSignedIn, isLoaded } = useUser();
+  const navigate = useNavigate();
   const { resumeData } = useResume();
+  const [chatActive, setChatActive] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I'm your ResumeForge AI Assistant. I can help with resume writing, ATS optimization, interview prep, and career advice. What would you like to know?" }
+    { role: 'assistant', content: "Hi! I'm your CareerForge AI Assistant. I can help with resume writing, ATS optimization, interview prep, and career advice. What would you like to know?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // Redirect unauthenticated users to sign-up page
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      navigate('/sign-up');
+    }
+  }, [isLoaded, isSignedIn, navigate]);
+
+  // Initialize and activate chat functionality once user is confirmed signed in
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      setChatActive(true);
+    }
+  }, [isLoaded, isSignedIn]);
 
   useEffect(() => {
     // Only scroll to bottom of messages, not to top of page

@@ -837,9 +837,9 @@ const ResumeBuilderPage = () => {
                     </button>
                     <div className="w-px h-6 bg-slate-200 hidden md:block" />
                     <div className="flex items-center gap-2.5">
-                        <img src="/logo.png" alt="ResumeForge Pro" className="h-7 w-auto" />
+                        <img src="/logo.png" alt="CareerForge Pro" className="h-7 w-auto" />
                         <h1 className="font-display font-bold text-slate-900 tracking-tight hidden md:block">
-                            Resume Forge <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Pro</span>
+                            CareerForge <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Pro</span>
                         </h1>
                     </div>
                 </div>

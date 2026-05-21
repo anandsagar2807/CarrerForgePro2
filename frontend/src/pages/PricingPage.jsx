@@ -29,7 +29,7 @@ const PricingPage = () => {
                             <Sparkles className="w-5 h-5 text-white" />
                         </div>
                         <span className="text-xl font-bold text-slate-900">
-                            ResumeForge <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Pro</span>
+                            CareerForge <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Pro</span>
                         </span>
                     </div>
                     <div className="w-24" /> {/* Spacer for centering */}
@@ -158,7 +158,7 @@ const PricingPage = () => {
             >
                 <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-3xl p-12 max-w-4xl mx-auto mx-6 shadow-2xl">
                     <h3 className="text-3xl font-bold text-white mb-4">Ready to build your dream resume?</h3>
-                    <p className="text-blue-100 mb-8 text-lg">Join thousands of professionals who trust ResumeForge Pro</p>
+                    <p className="text-blue-100 mb-8 text-lg">Join thousands of professionals who trust CareerForge Pro</p>
                     <button
                         onClick={() => navigate('/sign-up')}
                         className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 font-bold rounded-2xl hover:bg-slate-100 transition-all duration-300 shadow-lg hover:shadow-xl"

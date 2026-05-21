@@ -62,7 +62,7 @@ const Login = () => {
             <div className="p-2 bg-stone-900 rounded-lg">
               <FileText className="h-4 w-4 text-white" />
             </div>
-            <span className="text-lg font-semibold text-stone-900">ResumeForge</span>
+            <span className="text-lg font-semibold text-stone-900">CareerForge</span>
           </Link>
           <h1 className="text-2xl font-semibold text-stone-900 mb-1">Sign in</h1>
           <p className="text-stone-500">Enter your credentials to continue</p>

@@ -2,14 +2,24 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, X, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useUser } from '@clerk/react';
 
 const FloatingAIAssistant = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [chatInitialized, setChatInitialized] = useState(false);
     const navigate = useNavigate();
+    const { isSignedIn, isLoaded } = useUser();
+
+    // Only show the chat icon after the user successfully registers (is signed in)
+    if (!isLoaded || !isSignedIn) {
+        return null;
+    }
 
     const handleOpenChat = () => {
-        navigate('/sign-up');
+        // Initialize and fully activate the chat functionality
+        setChatInitialized(true);
         setIsOpen(false);
+        navigate('/chat');
     };
 
     return (

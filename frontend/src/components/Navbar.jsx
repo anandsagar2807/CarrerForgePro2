@@ -1,9 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ArrowRight } from 'lucide-react';
-import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/react';
-import Logo from './Logo';
+import { Menu, X } from 'lucide-react';
+import { UserButton, useUser } from '@clerk/react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -13,53 +12,45 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
     { label: 'Features', href: '/#powerful-features', isHash: true },
-    { label: 'Templates', href: '/sign-up', isHash: false },
+    { label: 'ATS Score', href: '/ai-tools/ats-optimizer', isHash: false },
+    { label: 'Templates', href: '/templates', isHash: false },
     { label: 'Pricing', href: '/pricing', isHash: false },
   ];
 
   const handleNavClick = (link) => {
     if (link.isHash) {
-      // Handle hash navigation (Features, Pricing)
       if (window.location.pathname === '/') {
-        // Already on home page, scroll to section
-        const hash = link.href.substring(2); // Remove the leading '/#'
+        const hash = link.href.substring(2);
         const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
       } else {
-        // Not on home page, navigate to home with hash
         navigate(link.href);
       }
-    } else {
-      // Regular navigation (Templates -> sign-up)
-      navigate(link.href);
+      return;
     }
+    navigate(link.href);
   };
+
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
-        ? 'glass-nav shadow-lg shadow-black/5'
-        : 'bg-transparent'
+      className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'backdrop-blur-xl bg-white/60 shadow-lg shadow-black/5 border-b border-slate-200/50' : 'bg-transparent'
         }`}
     >
       <nav className="section-container">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/sign-in" className="flex items-center gap-2.5 group">
-            <img src="/logo.png" alt="ResumeForge Pro" className="h-8 w-auto" />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <img src="/logo.png" alt="CareerForgePro" className="h-8 w-auto" />
             <span className="text-lg font-semibold text-dark tracking-tight">
-              ResumeForge<span className="text-primary">Pro</span>
+              CareerForge<span className="text-primary">Pro</span>
             </span>
           </Link>
 
@@ -69,9 +60,7 @@ const Navbar = () => {
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link)}
-                className={`text-sm font-medium transition-colors duration-150 ${location.pathname === link.href || (link.isHash && location.pathname === '/')
-                  ? 'text-primary'
-                  : 'text-stone-600 hover:text-dark'
+                className={`text-sm font-medium transition-colors duration-150 ${(location.pathname === link.href && !link.isHash) ? 'text-primary' : 'text-slate-600 hover:text-dark'
                   }`}
               >
                 {link.label}
@@ -82,29 +71,20 @@ const Navbar = () => {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             {isSignedIn ? (
-              <>
-                <button
-                  onClick={() => navigate('/sign-in')}
-                  className="px-5 py-2.5 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-100 transition-all duration-200"
-                >
-                  Dashboard
-                </button>
-                <UserButton afterSignOutUrl="/sign-in" />
-              </>
+              <UserButton afterSignOutUrl="/sign-in" />
             ) : (
               <>
                 <button
                   onClick={() => navigate('/sign-in')}
-                  className="px-5 py-2.5 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-100 transition-all duration-200"
+                  className="px-5 py-2.5 rounded-xl bg-white/70 backdrop-blur-md border border-slate-200/60 text-slate-700 text-sm font-semibold hover:shadow-md hover:shadow-primary/10 hover:bg-white transition-all duration-200"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => navigate('/sign-up')}
-                  className="px-5 py-2.5 bg-gradient-to-r from-blue-700 to-blue-900 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-200 flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all duration-200"
                 >
-                  Get Started
-                  <ArrowRight className="h-4 w-4" />
+                  Sign Up
                 </button>
               </>
             )}
@@ -112,8 +92,9 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 text-stone-600 hover:text-dark hover:bg-stone-100 rounded-lg transition-colors"
+            onClick={() => setIsMenuOpen((v) => !v)}
+            className="md:hidden p-2 text-slate-600 hover:text-dark hover:bg-slate-100 rounded-xl transition-colors"
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           >
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -129,7 +110,7 @@ const Navbar = () => {
               transition={{ duration: 0.2 }}
               className="md:hidden overflow-hidden"
             >
-              <div className="py-4 space-y-1 border-t border-stone-100">
+              <div className="py-4 space-y-3 border-t border-slate-200/50">
                 {navLinks.map((link) => (
                   <button
                     key={link.href}
@@ -137,53 +118,38 @@ const Navbar = () => {
                       handleNavClick(link);
                       setIsMenuOpen(false);
                     }}
-                    className={`w-full text-left block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${location.pathname === link.href || (link.isHash && location.pathname === '/')
-                      ? 'text-primary bg-primary-50'
-                      : 'text-stone-600 hover:text-dark hover:bg-stone-50'
-                      }`}
+                    className="w-full text-left block px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors text-slate-700 hover:bg-slate-50"
                   >
                     {link.label}
                   </button>
                 ))}
-                <div className="pt-4 mt-4 border-t border-stone-100 space-y-2">
-                  {isSignedIn ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          navigate('/sign-in');
-                          setIsMenuOpen(false);
-                        }}
-                        className="w-full px-5 py-2.5 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-100 transition-all"
-                      >
-                        Dashboard
-                      </button>
-                      <div className="flex justify-center py-2">
-                        <UserButton afterSignOutUrl="/sign-in" />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => {
-                          navigate('/sign-in');
-                          setIsMenuOpen(false);
-                        }}
-                        className="w-full px-5 py-2.5 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-100 transition-all"
-                      >
-                        Sign In
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate('/sign-in');
-                          setIsMenuOpen(false);
-                        }}
-                        className="w-full px-5 py-2.5 bg-gradient-to-r from-blue-700 to-blue-900 text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2"
-                      >
-                        Get Started
-                      </button>
-                    </>
-                  )}
-                </div>
+
+                {isSignedIn ? (
+                  <div className="flex justify-center pt-2">
+                    <UserButton afterSignOutUrl="/sign-in" />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => {
+                        navigate('/sign-in');
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full px-5 py-2.5 rounded-xl border border-slate-200/60 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-all duration-200"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/sign-up');
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all duration-200"
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}

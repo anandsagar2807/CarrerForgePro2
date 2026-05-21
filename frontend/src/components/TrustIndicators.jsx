@@ -9,7 +9,7 @@ const TrustIndicators = () => {
       role: "Software Engineer at Google",
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200",
       rating: 5,
-      text: "I got 5 interview calls in just 2 weeks after using ResumeForge! The ATS optimization really works. Highly recommend!",
+      text: "I got 5 interview calls in just 2 weeks after using CareerForge! The ATS optimization really works. Highly recommend!",
       stat: "5 interviews",
       statLabel: "in 2 weeks"
     },

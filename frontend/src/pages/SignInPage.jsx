@@ -34,10 +34,10 @@ const SignInPage = () => {
             <span className="text-sm font-semibold">Back to Home</span>
           </button>
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="ResumeForge Pro" className="h-10 w-auto" />
+            <img src="/logo.png" alt="CareerForge Pro" className="h-10 w-auto" />
             <div>
               <h1 className="text-2xl font-bold text-white">
-                ResumeForge <span className="text-blue-300">Pro</span>
+                CareerForge <span className="text-blue-300">Pro</span>
               </h1>
               <p className="text-sm text-slate-400">AI-Powered Resume Builder</p>
             </div>
@@ -121,9 +121,9 @@ const SignInPage = () => {
               <span className="text-sm font-semibold">Back to Home</span>
             </button>
             <div className="flex items-center justify-center gap-3 mb-3">
-              <img src="/logo.png" alt="ResumeForge Pro" className="h-10 w-auto" />
+              <img src="/logo.png" alt="CareerForge Pro" className="h-10 w-auto" />
               <h1 className="text-3xl font-bold text-slate-900">
-                ResumeForge <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Pro</span>
+                CareerForge <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Pro</span>
               </h1>
             </div>
           </div>

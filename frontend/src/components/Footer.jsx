@@ -50,7 +50,7 @@ const Footer = () => {
                 <FileText className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold text-slate-900 tracking-tight">
-                ResumeForge<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Pro</span>
+                CareerForge<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Pro</span>
               </span>
             </Link>
             <p className="text-slate-600 text-sm mb-6 max-w-xs leading-relaxed">
@@ -93,7 +93,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-600">
-            © {currentYear} ResumeForge Pro. All rights reserved.
+            © {currentYear} CareerForge Pro. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-slate-600">
             <Link to="/privacy" className="hover:text-blue-600 transition-colors">Privacy</Link>

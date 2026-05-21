@@ -14,7 +14,7 @@ const plans = [
       '1 resume template',
       'Basic AI suggestions',
       'PDF export',
-      'ATS scoring',
+      'ATS Score Checker — Free',
       'Email support',
     ],
     cta: 'Get Started',
@@ -117,8 +117,8 @@ const PricingCard = ({ plan, index }) => {
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate('/templates')}
           className={`w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-2 group/btn ${plan.popular
-              ? 'bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg hover:shadow-xl'
-              : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+            ? 'bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg hover:shadow-xl'
+            : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
             }`}
         >
           {plan.cta}

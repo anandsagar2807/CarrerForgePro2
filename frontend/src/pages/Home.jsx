@@ -161,7 +161,7 @@ const ProductShowcase = () => {
                   <div className="w-3 h-3 rounded-full bg-green-400" />
                 </div>
                 <div className="flex-1 text-center text-sm font-medium text-slate-400">
-                  ResumeForge Pro Editor
+                  CareerForge Pro Editor
                 </div>
               </div>
 
@@ -530,11 +530,11 @@ const Home = () => {
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate('/sign-up')}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 text-base font-semibold rounded-2xl border-2 border-slate-200 hover:border-blue-800 hover:bg-slate-50 transition-all duration-300"
+                    onClick={() => navigate('/ai-tools/ats-optimizer')}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 text-base font-semibold rounded-2xl border-2 border-slate-200 hover:border-green-600 hover:bg-green-50 transition-all duration-300"
                   >
-                    <Shield className="w-5 h-5 text-slate-400" />
-                    Check ATS Score
+                    <Shield className="w-5 h-5 text-green-600" />
+                    Check ATS Score — Free
                   </motion.button>
                 </div>
 

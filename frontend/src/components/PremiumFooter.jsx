@@ -34,7 +34,7 @@ const socialLinks = [
   { name: 'Twitter', icon: Twitter, href: '#' },
   { name: 'LinkedIn', icon: Linkedin, href: '#' },
   { name: 'GitHub', icon: Github, href: '#' },
-  { name: 'Email', icon: Mail, href: 'mailto:support@resumeforge.pro' },
+  { name: 'Email', icon: Mail, href: 'mailto:support@careerforge.pro' },
 ];
 
 const PremiumFooter = () => {
@@ -59,7 +59,7 @@ const PremiumFooter = () => {
               Ready to land your dream job?
             </h2>
             <p className="text-lg text-slate-300 mb-10">
-              Join 50,000+ professionals who have transformed their careers with ResumeForge Pro.
+              Join 50,000+ professionals who have transformed their careers with CareerForge Pro.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <motion.button
@@ -84,9 +84,9 @@ const PremiumFooter = () => {
           {/* Brand Column */}
           <div className="col-span-2">
             <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-              <img src="/logo.png" alt="ResumeForge Pro" className="h-8 w-auto" />
+              <img src="/logo.png" alt="CareerForge Pro" className="h-8 w-auto" />
               <span className="text-lg font-bold text-slate-900 tracking-tight">
-                ResumeForge<span className="text-blue-700">Pro</span>
+                CareerForge<span className="text-blue-700">Pro</span>
               </span>
             </Link>
             <p className="text-slate-500 text-sm leading-relaxed mb-6 max-w-xs">
@@ -182,7 +182,7 @@ const PremiumFooter = () => {
         <div className="section-container py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-500">
-              © 2026 ResumeForge Pro. All rights reserved.
+              © 2026 CareerForge Pro. All rights reserved.
             </p>
             <p className="text-sm text-slate-500 flex items-center gap-1">
               Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> for job seekers worldwide

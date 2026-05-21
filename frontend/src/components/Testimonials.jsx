@@ -7,7 +7,7 @@ const testimonials = [
     name: 'Sarah Chen',
     role: 'Product Manager at Google',
     avatar: 'SC',
-    quote: 'ResumeForge Pro helped me land interviews at 3 FAANG companies. The AI suggestions were spot-on and saved me hours of editing.',
+    quote: 'CareerForge Pro helped me land interviews at 3 FAANG companies. The AI suggestions were spot-on and saved me hours of editing.',
     rating: 5,
     gradient: 'from-blue-700 to-blue-900'
   },
@@ -31,7 +31,7 @@ const testimonials = [
     name: 'David Kim',
     role: 'Data Scientist at Amazon',
     avatar: 'DK',
-    quote: 'I was skeptical at first, but the results speak for themselves. 40% more interview callbacks after using ResumeForge Pro.',
+    quote: 'I was skeptical at first, but the results speak for themselves. 40% more interview callbacks after using CareerForge Pro.',
     rating: 5,
     gradient: 'from-blue-700 to-blue-900'
   },
@@ -47,7 +47,7 @@ const testimonials = [
     name: 'James Wilson',
     role: 'VP Engineering at Stripe',
     avatar: 'JW',
-    quote: 'We recommend ResumeForge Pro to all our candidates. The quality and professionalism is unmatched in the market.',
+    quote: 'We recommend CareerForge Pro to all our candidates. The quality and professionalism is unmatched in the market.',
     rating: 5,
     gradient: 'from-blue-700 to-blue-900'
   }
@@ -98,7 +98,7 @@ const Testimonials = () => {
     <section className="py-24 lg:py-32 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-      
+
       <div className="section-container">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
@@ -111,7 +111,7 @@ const Testimonials = () => {
             <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
             <span className="text-sm font-semibold text-slate-700">Trusted by 50,000+ professionals</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -125,7 +125,7 @@ const Testimonials = () => {
               worldwide
             </span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ const Testimonials = () => {
             transition={{ delay: 0.2 }}
             className="text-xl text-slate-500"
           >
-            See what professionals are saying about their experience with ResumeForge Pro
+            See what professionals are saying about their experience with CareerForge Pro
           </motion.p>
         </div>
 

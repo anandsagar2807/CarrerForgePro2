@@ -633,3 +633,107 @@ html {
 .table-luxury tbody tr {
   @apply transition-colors duration-200 hover:bg-slate-50;
 }
+
+/* Premium Page Transitions - AnimatePresence Support */
+.page-transition-wrapper {
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.page-transition-wrapper > * {
+  will-change: auto;
+}
+
+/* Prevent scroll jitter during page transitions */
+.page-transition-entering {
+  overflow: hidden;
+}
+
+.page-transition-entering body {
+  overflow-y: hidden;
+}
+
+/* Premium Page Loader */
+.page-loader-spinner {
+  animation: page-loader-spin 0.8s linear infinite;
+}
+
+@keyframes page-loader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Smooth page content reveal */
+.page-content-reveal {
+  animation: page-content-reveal 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes page-content-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Prevent layout shift during lazy loading */
+.lazy-page-placeholder {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
+}
+
+/* Premium stagger animation for section entries */
+.stagger-section-enter {
+  animation: stagger-section-fade-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+@keyframes stagger-section-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Full-viewport section support */
+.full-viewport-section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Premium scroll snap for immersive experience */
+@media (min-width: 1024px) {
+  .immersive-scroll-container {
+    scroll-snap-type: y proximity;
+  }
+
+  .immersive-scroll-section {
+    scroll-snap-align: start;
+  }
+}
+
+/* Premium focus ring for interactive elements during transitions */
+.focus-ring-transition:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  transition: outline-offset 0.2s ease;
+}
