@@ -1,11 +1,19 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Brutal Honest Review
 export const getBrutalHonestReview = async (resumeText) => {
   const response = await axios.post(`${API_URL}/ai/advanced/brutal-review`, {
     resumeText
+  });
+  return response.data;
+};
+
+// JD Analysis Agent
+export const analyzeJD = async (jdText) => {
+  const response = await axios.post(`${API_URL}/ai/analyze-jd`, {
+    jdText
   });
   return response.data;
 };

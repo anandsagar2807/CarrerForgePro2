@@ -13,22 +13,22 @@ const Logo = ({ size = 'md', variant = 'default' }) => {
   // Premium color variants
   const colorSchemes = {
     default: {
-      primary: '#8B7355',
-      secondary: '#D4AF37',
-      accent: '#C19A6B',
-      background: '#F5F0E6',
+      primary: '#2563eb',
+      secondary: '#4f46e5',
+      accent: '#6366f1',
+      background: '#f8fafc',
     },
     premium: {
-      primary: '#B8860B',
-      secondary: '#FFD700',
-      accent: '#DAA520',
-      background: '#FFF8DC',
+      primary: '#1e40af',
+      secondary: '#3730a3',
+      accent: '#4338ca',
+      background: '#eff6ff',
     },
     dark: {
-      primary: '#D4AF37',
-      secondary: '#FFD700',
-      accent: '#C19A6B',
-      background: '#2C2C2C',
+      primary: '#60a5fa',
+      secondary: '#818cf8',
+      accent: '#a5b4fc',
+      background: '#0f172a',
     }
   };
 

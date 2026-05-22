@@ -3,65 +3,48 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Sparkles, Shield, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Pricing from '../components/Pricing';
+import Navbar from '../components/Navbar';
 
 const PricingPage = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
-            {/* Animated background elements */}
-            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-100/20 to-purple-100/20 rounded-full blur-3xl" />
-
-            {/* Header */}
-            <div className="bg-white/90 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <button
-                        onClick={() => navigate('/')}
-                        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all duration-300 hover:gap-3"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span className="text-sm font-semibold">Back to Home</span>
-                    </button>
-                    <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <Sparkles className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-xl font-bold text-slate-900">
-                            CareerForge <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Pro</span>
-                        </span>
-                    </div>
-                    <div className="w-24" /> {/* Spacer for centering */}
-                </div>
+        <div className="min-h-screen bg-[#020617] text-white font-sans overflow-x-hidden">
+            {/* Premium Animated background gradients */}
+            <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+                <div className="absolute -top-40 left-[-8rem] h-[35rem] w-[35rem] rounded-full bg-blue-600/10 blur-[150px] animate-pulse" />
+                <div className="absolute top-1/3 right-[-10rem] h-[40rem] w-[40rem] rounded-full bg-indigo-600/10 blur-[160px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+                <div className="absolute bottom-0 left-1/4 h-[30rem] w-[30rem] rounded-full bg-violet-600/10 blur-[140px] animate-pulse" style={{ animationDelay: '3s' }} />
             </div>
+
+            <Navbar isDark={true} />
 
             {/* Hero Section */}
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut" }}
-                className="relative z-10 max-w-4xl mx-auto text-center pt-24 pb-12 px-6"
+                className="relative z-10 max-w-5xl mx-auto text-center pt-32 pb-16 px-6"
             >
                 {/* Badge */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200/50 rounded-full mb-8 shadow-sm"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500/10 border border-blue-500/20 rounded-full mb-8 backdrop-blur-md"
                 >
-                    <Shield className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-bold text-slate-700">30-Day Money-Back Guarantee</span>
+                    <Shield className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm font-bold text-blue-100">30-Day Money-Back Guarantee</span>
                 </motion.div>
 
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
-                    Choose Your{' '}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
-                        Perfect Plan
+                <h1 className="text-5xl md:text-6xl lg:text-8xl font-extrabold text-white mb-8 tracking-tight">
+                    Premium Plans for{' '}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 animate-gradient-x">
+                        Top Professionals
                     </span>
                 </h1>
-                <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
-                    Start free and unlock powerful features as you grow. No hidden fees, cancel anytime.
+                <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                    Unlock the full power of <span className="text-white font-medium">Gemini 2.0</span> optimized resumes and landing your dream job with ease.
                 </p>
 
                 {/* Trust indicators */}
@@ -69,23 +52,25 @@ const PricingPage = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="flex items-center justify-center gap-8 mt-10"
+                    className="flex flex-wrap items-center justify-center gap-10 mt-12"
                 >
                     {[
-                        { icon: <Zap className="w-5 h-5" />, text: "No credit card" },
-                        { icon: <Shield className="w-5 h-5" />, text: "Secure & safe" },
-                        { icon: <Sparkles className="w-5 h-5" />, text: "Cancel anytime" }
+                        { icon: <Zap className="w-5 h-5" />, text: "Instant AI Optimization" },
+                        { icon: <Shield className="w-5 h-5" />, text: "ATS-Grade Templates" },
+                        { icon: <Sparkles className="w-5 h-5" />, text: "24/7 AI Career Coach" }
                     ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-2 text-slate-600">
-                            <div className="text-blue-600">{item.icon}</div>
-                            <span className="text-sm font-medium">{item.text}</span>
+                        <div key={i} className="flex items-center gap-3 text-slate-300">
+                            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
+                                <div className="text-blue-400">{item.icon}</div>
+                            </div>
+                            <span className="text-sm font-semibold tracking-wide uppercase">{item.text}</span>
                         </div>
                     ))}
                 </motion.div>
             </motion.div>
 
             {/* Pricing Component */}
-            <div className="relative z-10">
+            <div className="relative z-10 py-12">
                 <Pricing />
             </div>
 
@@ -94,44 +79,32 @@ const PricingPage = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="relative z-10 max-w-3xl mx-auto px-6 pb-32 pt-16"
+                className="relative z-10 max-w-4xl mx-auto px-6 pb-32 pt-20"
             >
-                <div className="text-center mb-12">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full mb-6"
-                    >
-                        <Sparkles className="w-4 h-4 text-blue-600" />
-                        <span className="text-sm font-bold text-slate-700">FAQ</span>
-                    </motion.div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
-                        Frequently Asked Questions
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                        Got Questions?
                     </h2>
+                    <p className="text-slate-400">Everything you need to know about Zaalima Forge Pro</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-6">
                     {[
                         {
-                            q: 'Can I try Pro features before paying?',
-                            a: 'Yes! You get a 7-day free trial of Pro features when you sign up. No credit card required.'
+                            q: 'How does the AI work?',
+                            a: 'We use Gemini 2.0 to semantically analyze your resume and the target JD, identifying critical gaps and automatically optimizing your content for ATS algorithms.'
                         },
                         {
-                            q: 'What happens when my free trial ends?',
-                            a: 'Your account will automatically switch to the Free plan. You won\'t be charged unless you choose to upgrade.'
+                            q: 'Can I cancel anytime?',
+                            a: 'Yes! No long-term contracts. You can cancel your subscription with a single click from your dashboard at any time.'
                         },
                         {
-                            q: 'Can I cancel my subscription anytime?',
-                            a: 'Absolutely. You can cancel anytime from your account settings. No questions asked.'
+                            q: 'Is my data secure?',
+                            a: 'Absolutely. We use bank-level encryption to protect your personal information and never share your resume data with third parties.'
                         },
                         {
-                            q: 'Is there a discount for annual billing?',
-                            a: 'Yes! Save 20% when you choose annual billing on the Pro plan. That\'s just $9.60/month.'
-                        },
-                        {
-                            q: 'Do you offer refunds?',
-                            a: 'We offer a 30-day money-back guarantee on all paid plans. If you\'re not satisfied, contact us for a full refund.'
+                            q: 'Do you offer student discounts?',
+                            a: 'Yes, students get 50% off the Pro plan. Contact our support team with your student ID to receive a discount code.'
                         }
                     ].map((faq, index) => (
                         <motion.div
@@ -140,10 +113,10 @@ const PricingPage = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 group"
                         >
-                            <h3 className="font-bold text-slate-900 mb-3 text-lg">{faq.q}</h3>
-                            <p className="text-slate-600 leading-relaxed">{faq.a}</p>
+                            <h3 className="font-bold text-white mb-4 text-xl group-hover:text-blue-400 transition-colors">{faq.q}</h3>
+                            <p className="text-slate-400 leading-relaxed text-sm">{faq.a}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -154,18 +127,21 @@ const PricingPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="relative z-10 text-center pb-24"
+                className="relative z-10 text-center pb-32 px-6"
             >
-                <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-3xl p-12 max-w-4xl mx-auto mx-6 shadow-2xl">
-                    <h3 className="text-3xl font-bold text-white mb-4">Ready to build your dream resume?</h3>
-                    <p className="text-blue-100 mb-8 text-lg">Join thousands of professionals who trust CareerForge Pro</p>
-                    <button
-                        onClick={() => navigate('/sign-up')}
-                        className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 font-bold rounded-2xl hover:bg-slate-100 transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                        Get Started Free
-                        <ArrowLeft className="w-5 h-5 rotate-180" />
-                    </button>
+                <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-12 lg:p-20 max-w-5xl mx-auto overflow-hidden shadow-2xl shadow-blue-500/20">
+                    <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+                    <div className="relative z-10">
+                        <h3 className="text-4xl lg:text-5xl font-extrabold text-white mb-6">Ready to upgrade your career?</h3>
+                        <p className="text-blue-100 mb-10 text-lg max-w-2xl mx-auto">Join 50,000+ professionals who have already landed their dream jobs using Zaalima Forge Pro.</p>
+                        <button
+                            onClick={() => navigate('/sign-up')}
+                            className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 font-extrabold rounded-2xl hover:scale-105 transition-all duration-300 shadow-xl"
+                        >
+                            Get Started Now
+                            <ArrowLeft className="w-5 h-5 rotate-180" />
+                        </button>
+                    </div>
                 </div>
             </motion.div>
         </div>

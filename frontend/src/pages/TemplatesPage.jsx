@@ -10,7 +10,6 @@ import groqTemplatesService, { templateStyles } from '../services/groqTemplates'
 import { useResume } from '../context/ResumeContext';
 import Navbar from '../components/Navbar';
 import TemplatePageHeader from '../components/TemplatePageHeader';
-import Footer from '../components/Footer';
 import TemplateComparison from '../components/TemplateComparison';
 import TemplateCustomizationModal from '../components/TemplateCustomizationModal';
 import {
@@ -48,273 +47,171 @@ const TemplatesPage = () => {
     { id: 'Simple', label: 'Minimalist', count: 1, icon: User },
     { id: 'Modern', label: 'Modern', count: 1, icon: Grid },
     { id: 'Professional', label: 'Professional', count: 1, icon: Briefcase },
-    { id: 'Creative', label: 'Creative', count: 1, icon: Star },
-    { id: 'Compact', label: 'Compact', count: 1, icon: Grid },
+    { id: 'Creative', label: 'Creative', count: 1, icon: Zap },
+    { id: 'Compact', label: 'Compact', count: 1, icon: Filter },
     { id: 'Executive', label: 'Executive', count: 1, icon: Star },
-    { id: 'ATS Friendly', label: 'ATS Friendly', count: 1, icon: Check },
-    { id: 'Technical', label: 'Technical', count: 1, icon: Code },
+    { id: 'ATS', label: 'ATS-Friendly', count: 1, icon: Check },
+    { id: 'Tech', label: 'Developer', count: 1, icon: Code },
   ];
 
-  const allTemplates = useMemo(() => {
-    return Object.entries(templateStyles).map(([id, style]) => ({
-      id,
-      ...style,
-      TemplateComponent: templateComponents[id]
-    }));
-  }, []);
-
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await groqTemplatesService.getDefaultData();
-        setResumeData(data);
-      } catch (error) {
-        console.error('Failed to load resume data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadData();
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      // Mock resume data for preview
+      setResumeData({
+        personalInfo: {
+          fullName: 'Alex Morgan',
+          title: 'Senior Product Designer',
+          email: 'alex.morgan@design.com',
+          phone: '(555) 123-4567',
+          location: 'San Francisco, CA',
+          summary: 'Innovation-driven Product Designer with 8+ years of experience in creating user-centric digital experiences for global SaaS companies.'
+        },
+        experience: [
+          {
+            company: 'DesignFlow Inc.',
+            position: 'Lead UI/UX Designer',
+            startDate: '2020-01',
+            endDate: 'Present',
+            description: 'Leading a team of 12 designers to revolutionize the design system and user experience across 3 core products.'
+          }
+        ],
+        education: [
+          {
+            school: 'Rhode Island School of Design',
+            degree: 'BFA in Graphic Design',
+            startDate: '2012-09',
+            endDate: '2016-05'
+          }
+        ],
+        skills: [{ name: 'Figma' }, { name: 'React' }, { name: 'Product Strategy' }, { name: 'User Research' }],
+        projects: []
+      });
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
-  const filteredTemplates = allTemplates.filter(template => {
-    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
-    const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredTemplates = useMemo(() => {
+    return Object.values(templateStyles).filter(template => {
+      const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
+      const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        template.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, searchQuery]);
 
-  const mapGeneratedToContextData = (generated, templateId) => {
-    const timestamp = Date.now();
-    const personal = generated?.personalInfo || {};
-    const summary = generated?.summary || '';
-
-    return {
-      personalInfo: {
-        fullName: personal.name || 'Your Name',
-        email: personal.email || '',
-        phone: personal.phone || '',
-        location: personal.location || '',
-        linkedin: personal.linkedin || '',
-        github: personal.website || '',
-        portfolio: personal.website || '',
-        summary,
-      },
-      education: (generated?.education || []).map((edu, index) => ({
-        id: timestamp + index,
-        institution: edu.school || '',
-        degree: edu.degree || '',
-        field: edu.field || '',
-        startDate: '',
-        endDate: edu.year || '',
-        gpa: '',
-        description: '',
-      })),
-      experience: (generated?.experience || []).map((exp, index) => ({
-        id: timestamp + 100 + index,
-        company: exp.company || '',
-        position: exp.title || '',
-        location: exp.location || '',
-        startDate: exp.startDate || '',
-        endDate: exp.endDate || '',
-        description: Array.isArray(exp.achievements) ? exp.achievements.join('\n') : '',
-      })),
-      skills: [
-        ...(generated?.skills?.technical || []),
-        ...(generated?.skills?.soft || []),
-      ].map((skill, index) => ({
-        id: timestamp + 200 + index,
-        name: skill,
-        category: index < (generated?.skills?.technical || []).length ? 'Technical' : 'Soft',
-        level: 'Advanced',
-      })),
-      projects: (generated?.projects || []).map((project, index) => ({
-        id: timestamp + 300 + index,
-        name: project.name || '',
-        description: project.description || '',
-        technologies: project.tech || [],
-        link: project.link || '',
-      })),
-      selectedTemplate: templateId,
-    };
-  };
-
-  const handleTemplateSelect = async (templateId, userInput = {}) => {
-    try {
-      setIsRouting(true);
-      setTemplate(templateId);
-
-      const generated = await groqTemplatesService.generateTemplateContent(templateId, userInput);
-      const mappedData = mapGeneratedToContextData(generated, templateId);
-      updateResumeData(mappedData);
-
+  const handleUseTemplate = (templateId) => {
+    setIsRouting(true);
+    setTemplate(templateId);
+    setTimeout(() => {
       navigate(`/builder/${templateId}`);
-    } finally {
-      setIsRouting(false);
-    }
-  };
-
-  const openCustomizationModal = (templateId) => {
-    setSelectedTemplateForCustomization(templateId);
-    setShowCustomizationModal(true);
-  };
-
-  const handleCustomGenerate = async (userInput) => {
-    setShowCustomizationModal(false);
-    await handleTemplateSelect(selectedTemplateForCustomization, userInput);
+    }, 800);
   };
 
   const openPreview = (templateId) => {
     setPreviewTemplate(templateId);
-    document.body.style.overflow = 'hidden';
   };
 
   const closePreview = () => {
     setPreviewTemplate(null);
-    document.body.style.overflow = 'unset';
   };
 
-  const handleUseTemplate = (templateId) => {
-    openCustomizationModal(templateId);
+  const handleCustomGenerate = (data) => {
+    // This would ideally call an AI service to populate parts of the resume
+    console.log('Generating with customization:', data);
+    setShowCustomizationModal(false);
+    handleUseTemplate(selectedTemplateForCustomization);
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-slate-600">Loading templates...</p>
+          <Loader2 className="h-10 w-10 animate-spin text-blue-500 mx-auto mb-6" />
+          <p className="text-slate-400 font-medium tracking-wide">Loading Premium Templates...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#f4f0e8] via-[#fbf9f5] to-[#e8edf8]">
-      {/* Navbar */}
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-[#020617] text-white overflow-x-hidden">
+      {/* Premium Animated background gradients */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 left-[-8rem] h-[35rem] w-[35rem] rounded-full bg-blue-600/10 blur-[150px] animate-pulse" />
+        <div className="absolute bottom-0 right-[-10rem] h-[40rem] w-[40rem] rounded-full bg-indigo-600/10 blur-[160px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+      </div>
 
-      {/* Enhanced Header */}
-      <TemplatePageHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Navbar isDark={true} />
 
-      {/* Quick Navigation - Task-specific links */}
-      <div className="glass-card border-b border-white/30 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 bg-gradient-to-r from-[#7d5f3f]/20 to-[#7d5f3f]/10 text-[#7d5f3f] px-3 py-1.5 rounded-lg text-sm font-semibold backdrop-blur-sm">
-                <LayoutGrid className="h-4 w-4" />
-                Step 1: Choose Template
-              </div>
-              <ArrowRight className="h-4 w-4 text-slate-300 hidden md:block" />
-              <Link to="/analyze" className="flex items-center gap-2 bg-white/50 text-slate-600 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-white/80 transition-colors backdrop-blur-sm">
-                <Search className="h-4 w-4" />
-                Step 2: ATS Analysis
-              </Link>
-              <ArrowRight className="h-4 w-4 text-slate-300 hidden md:block" />
-              <span className="flex items-center gap-2 bg-white/50 text-slate-500 px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm">
-                <FileText className="h-4 w-4" />
-                Step 3: Build Resume
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
+      <main className="flex-1 pt-24">
+        <TemplatePageHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-32">
+          {/* Category Filter */}
+          <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-12 mb-12 border-b border-white/5">
+            {categories.map((category) => (
               <button
-                onClick={() => setShowComparison(true)}
-                className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors px-3 py-2 rounded-lg hover:bg-blue-50 backdrop-blur-sm border border-blue-200"
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`flex items-center gap-2.5 px-6 py-3.5 rounded-2xl transition-all duration-500 whitespace-nowrap border ${
+                  selectedCategory === category.id
+                    ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_30px_rgba(37,99,235,0.4)] scale-105'
+                    : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-white'
+                }`}
               >
-                <BarChart3 className="h-4 w-4" />
-                Compare Templates
+                <category.icon size={18} />
+                <span className="text-sm font-bold">{category.label}</span>
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${
+                  selectedCategory === category.id ? 'bg-white/20 text-white' : 'bg-white/5 text-slate-500'
+                }`}>
+                  {category.count}
+                </span>
               </button>
-              <Link to="/cover-letter" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-[#7d5f3f] transition-colors px-3 py-2 rounded-lg hover:bg-[#7d5f3f]/10 backdrop-blur-sm">
-                <FileText className="h-4 w-4" />
-                Cover Letter
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Category Filters */}
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-6">
-            <Filter className="h-5 w-5 text-slate-600" />
-            <h2 className="text-lg font-semibold text-slate-900">Filter by Category</h2>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => {
-              const Icon = category.icon;
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${selectedCategory === category.id
-                    ? 'bg-[#7d5f3f] text-white shadow-lg shadow-[#7d5f3f]/25'
-                    : 'bg-white/90 text-slate-700 border border-[#ddd0bb] hover:border-[#7d5f3f] hover:text-[#7d5f3f] hover:shadow-md'
-                    }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {category.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Templates Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <AnimatePresence mode="popLayout">
-            {filteredTemplates.map((template) => (
-              <TemplateCard
-                key={template.id}
-                template={template}
-                resumeData={resumeData}
-                onPreview={openPreview}
-                onSelect={handleUseTemplate}
-                isSelected={selectedTemplate === template.id}
-                onSelectChange={setSelectedTemplate}
-              />
             ))}
-          </AnimatePresence>
-        </div>
-
-        {/* Empty State */}
-        {filteredTemplates.length === 0 && (
-          <div className="text-center py-16">
-            <LayoutGrid className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-700 mb-2">No templates found</h3>
-            <p className="text-slate-500">Try adjusting your search or filter criteria</p>
           </div>
-        )}
 
-        {/* Help Section */}
-        <div className="mt-16 bg-gradient-to-r from-[#efe3d0] to-[#dce8fa] rounded-2xl p-8 border border-[#deccb2]">
-          <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-slate-900 mb-4">Not sure which template to choose?</h3>
-            <p className="text-slate-700 mb-6">
-              <span className="font-semibold">Modern</span> templates work best for tech and creative roles.
-              <span className="mx-2">•</span>
-              <span className="font-semibold"> ATS</span> templates are optimized for applicant tracking systems.
-              <span className="mx-2">•</span>
-              <span className="font-semibold"> Professional</span> templates are ideal for corporate roles.
-            </p>
-            <button
-              onClick={() => handleUseTemplate('modern')}
-              className="inline-flex items-center gap-2 bg-[#3f5f8e] text-white font-semibold py-3 px-6 rounded-xl hover:bg-[#314f7b] transition-colors duration-200 shadow-lg shadow-[#3f5f8e]/25"
-            >
-              <Sparkles className="h-5 w-5" />
-              Use Modern Pro Template
-            </button>
+          {/* Templates Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
+            <AnimatePresence mode='popLayout'>
+              {filteredTemplates.map((template) => (
+                <TemplateCard 
+                  key={template.id} 
+                  template={{...template, TemplateComponent: templateComponents[template.id]}} 
+                  resumeData={resumeData}
+                  onPreview={openPreview}
+                  onSelect={handleUseTemplate}
+                  isSelected={selectedTemplate === template.id}
+                  onSelectChange={setSelectedTemplate}
+                />
+              ))}
+            </AnimatePresence>
           </div>
+
+          {filteredTemplates.length === 0 && (
+            <div className="text-center py-40 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+              <div className="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center mx-auto mb-8">
+                <Search className="w-10 h-10 text-slate-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">No matching templates found</h3>
+              <p className="text-slate-400 font-medium">Try adjusting your search or category filter.</p>
+              <button 
+                onClick={() => {setSelectedCategory('all'); setSearchQuery('');}}
+                className="mt-8 text-blue-400 font-bold hover:text-blue-300 transition-colors"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
         </div>
-      </div>
+      </main>
 
       {isRouting && (
-        <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-white rounded-2xl px-6 py-5 shadow-2xl border border-[#eadfcf] flex items-center gap-3">
-            <Loader2 className="h-5 w-5 animate-spin text-[#7d5f3f]" />
-            <span className="text-sm font-semibold text-slate-700">Preparing template and opening builder...</span>
+        <div className="fixed inset-0 z-50 bg-[#020617]/80 backdrop-blur-xl flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-blue-500 mx-auto mb-6" />
+            <p className="text-white font-black tracking-widest uppercase text-xs">Launching Builder Experience...</p>
           </div>
         </div>
       )}
@@ -330,26 +227,11 @@ const TemplatesPage = () => {
           />
         )}
       </AnimatePresence>
-
-      {/* Template Comparison Modal */}
-      {showComparison && (
-        <TemplateComparison onClose={() => setShowComparison(false)} />
-      )}
-
-      {/* Customization Modal */}
-      <TemplateCustomizationModal
-        isOpen={showCustomizationModal}
-        onClose={() => setShowCustomizationModal(false)}
-        onGenerate={handleCustomGenerate}
-        templateName={templateStyles[selectedTemplateForCustomization]?.name || ''}
-      />
-
-      <Footer />
     </div>
   );
 };
 
-// Template Card Component
+// Internal Template Card Component
 const TemplateCard = ({ template, resumeData, onPreview, onSelect, isSelected, onSelectChange }) => {
   const TemplateComponent = template.TemplateComponent;
   const [isHovered, setIsHovered] = useState(false);
@@ -360,92 +242,71 @@ const TemplateCard = ({ template, resumeData, onPreview, onSelect, isSelected, o
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className={`group relative bg-white rounded-2xl overflow-hidden border-2 transition-all duration-300 ${isSelected
-        ? 'border-blue-500 shadow-xl shadow-blue-500/20'
-        : 'border-slate-200 hover:border-blue-300 hover:shadow-xl'
+      className={`group relative bg-white/5 rounded-[2.5rem] overflow-hidden border transition-all duration-500 cursor-pointer ${isSelected
+        ? 'border-blue-500 shadow-[0_0_40px_rgba(37,99,235,0.2)]'
+        : 'border-white/10 hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(37,99,235,0.1)]'
         }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onSelectChange(template.id)}
     >
-      {/* Premium Badge */}
-      {template.premium && (
-        <div className="absolute top-3 right-3 z-10">
-          <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold rounded-full shadow-lg flex items-center gap-1">
-            <Star className="h-3 w-3 fill-current" />
-            PREMIUM
-          </span>
-        </div>
-      )}
+      <div className="absolute top-6 right-6 z-10">
+        <span className="px-3 py-1 bg-blue-500/20 backdrop-blur-md text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-lg border border-blue-500/30 flex items-center gap-1.5">
+          <Star className="h-3 w-3 fill-current" />
+          Premium
+        </span>
+      </div>
 
-      {/* Template Preview Thumbnail */}
-      <div className="aspect-[3/4] bg-white relative overflow-hidden">
-        {TemplateComponent && resumeData && (
-          <div className="absolute inset-0 origin-top-left scale-[0.25]">
-            <TemplateComponent data={resumeData} scale={1} isPreview />
+      <div className="aspect-[3/4] bg-slate-900/50 relative overflow-hidden flex items-center justify-center p-8">
+        {TemplateComponent && resumeData ? (
+          <div className="w-full h-full bg-[#0f172a] rounded-xl border border-white/5 shadow-2xl overflow-hidden p-4 origin-top scale-[0.6] group-hover:scale-[0.65] transition-transform duration-700">
+             <TemplateComponent data={resumeData} scale={1} isPreview />
           </div>
+        ) : (
+          <div className="w-full h-full bg-[#0f172a] rounded-xl border border-white/5 animate-pulse" />
         )}
 
-        {/* Hover Overlay */}
-        <div className={`absolute inset-0 bg-slate-900/80 flex items-center justify-center transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'
+        <div className={`absolute inset-0 bg-blue-600/20 backdrop-blur-sm flex flex-col items-center justify-center gap-4 transition-all duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'
           }`}>
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onPreview(template.id);
-              }}
-              className="flex items-center gap-2 bg-white text-slate-900 font-semibold py-3 px-6 rounded-xl hover:bg-slate-100 transition-colors"
-            >
-              <Eye className="h-5 w-5" />
-              Full Preview
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect(template.id);
-              }}
-              className="flex items-center gap-2 bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl hover:bg-blue-700 transition-colors"
-            >
-              <Sparkles className="h-5 w-5" />
-              Use Template
-            </button>
-          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onPreview(template.id);
+            }}
+            className="flex items-center gap-2 bg-white text-[#020617] font-black py-4 px-8 rounded-2xl text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-2xl"
+          >
+            <Eye className="h-4 w-4" />
+            Full Preview
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(template.id);
+            }}
+            className="flex items-center gap-2 bg-blue-600 text-white font-black py-4 px-8 rounded-2xl text-xs uppercase tracking-widest hover:bg-blue-500 hover:scale-105 transition-all shadow-2xl"
+          >
+            <Sparkles className="h-4 w-4" />
+            Use Template
+          </button>
         </div>
       </div>
 
-      {/* Template Info */}
-      <div className="p-5">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-lg font-bold text-slate-900">{template.name}</h3>
-          <span className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded-full">
+      <div className="p-8">
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors">{template.name}</h3>
+          <span className="px-2.5 py-1 bg-white/5 text-slate-500 text-[9px] font-black uppercase tracking-widest rounded-md border border-white/5">
             {template.layout}
           </span>
         </div>
-        <p className="text-slate-600 text-sm mb-4 line-clamp-2">{template.description}</p>
+        <p className="text-slate-400 text-sm mb-6 line-clamp-2 leading-relaxed font-medium">{template.description}</p>
 
-        {/* Features */}
         <div className="flex flex-wrap gap-2">
-          {template.sections.slice(0, 4).map((section, idx) => (
-            <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-md">
+          {template.sections.slice(0, 3).map((section, idx) => (
+            <span key={idx} className="px-3 py-1 bg-blue-500/5 text-blue-400 text-[10px] font-bold rounded-lg border border-blue-500/10">
               {section}
             </span>
           ))}
         </div>
-      </div>
-
-      {/* Use Button */}
-      <div className="px-5 pb-5 pt-0">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(template.id);
-          }}
-          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg"
-        >
-          <Sparkles className="h-4 w-4" />
-          Use This Template
-        </button>
       </div>
     </motion.div>
   );
@@ -453,113 +314,74 @@ const TemplateCard = ({ template, resumeData, onPreview, onSelect, isSelected, o
 
 // Preview Modal Component
 const PreviewModal = ({ templateId, resumeData, onClose, onUse }) => {
-  const [currentTemplate, setCurrentTemplate] = useState(templateId);
-  const TemplateComponent = templateComponents[currentTemplate];
-  const allTemplateIds = Object.keys(templateComponents);
-  const currentIndex = allTemplateIds.indexOf(currentTemplate);
-
-  const goToPrevious = () => {
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : allTemplateIds.length - 1;
-    setCurrentTemplate(allTemplateIds[newIndex]);
-  };
-
-  const goToNext = () => {
-    const newIndex = currentIndex < allTemplateIds.length - 1 ? currentIndex + 1 : 0;
-    setCurrentTemplate(allTemplateIds[newIndex]);
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') goToPrevious();
-      if (e.key === 'ArrowRight') goToNext();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex]);
-
-  const template = templateStyles[currentTemplate];
+  const TemplateComponent = templateComponents[templateId];
+  const templateInfo = templateStyles.find(t => t.id === templateId);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
     >
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors z-10"
-      >
-        <X className="h-6 w-6 text-white" />
-      </button>
-
-      {/* Navigation */}
-      <button
-        onClick={goToPrevious}
-        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors"
-      >
-        <ChevronLeft className="h-6 w-6 text-white" />
-      </button>
-      <button
-        onClick={goToNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors"
-      >
-        <ChevronRight className="h-6 w-6 text-white" />
-      </button>
-
-      {/* Modal Content */}
+      <div className="absolute inset-0 bg-[#020617]/90 backdrop-blur-xl" onClick={onClose} />
+      
       <motion.div
-        key={currentTemplate}
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-2xl overflow-hidden w-full max-w-4xl max-h-[90vh] flex flex-col"
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        className="relative bg-[#0f172a] w-full max-w-6xl h-[90vh] rounded-[3rem] shadow-2xl border border-white/10 overflow-hidden flex flex-col md:flex-row"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b">
+        <button
+          onClick={onClose}
+          className="absolute top-8 right-8 z-20 p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-slate-400 hover:text-white transition-all border border-white/10"
+        >
+          <X size={24} />
+        </button>
+
+        <div className="flex-1 overflow-y-auto p-12 md:p-20 bg-[#020617] flex items-start justify-center scrollbar-hide">
+          <div className="w-full max-w-[800px] bg-white shadow-2xl rounded-sm overflow-hidden">
+            {TemplateComponent && <TemplateComponent data={resumeData} scale={1} isPreview />}
+          </div>
+        </div>
+
+        <div className="w-full md:w-96 p-12 bg-white/5 backdrop-blur-md border-l border-white/10 flex flex-col justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">{template?.name}</h2>
-            <p className="text-sm text-slate-600">{template?.description}</p>
+            <div className="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mb-8 border border-blue-500/30">
+              <Sparkles className="w-8 h-8 text-blue-400" />
+            </div>
+            <h2 className="text-3xl font-black text-white mb-4 tracking-tight">{templateInfo?.name}</h2>
+            <p className="text-slate-400 font-medium leading-relaxed mb-8">{templateInfo?.description}</p>
+            
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Key Features</h4>
+              <ul className="space-y-4">
+                {templateInfo?.sections.map((feature, i) => (
+                  <li key={i} className="flex items-center gap-3 text-sm text-slate-300 font-bold">
+                    <div className="w-5 h-5 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                      <Check className="w-3 h-3 text-blue-400" />
+                    </div>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            {template?.premium && (
-              <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold rounded-full">
-                PREMIUM
-              </span>
-            )}
-            <span className="px-3 py-1 bg-slate-200 text-slate-700 text-xs font-semibold rounded-full">
-              {currentIndex + 1} / {allTemplateIds.length}
-            </span>
-          </div>
-        </div>
 
-        {/* Preview */}
-        <div className="flex-1 overflow-auto bg-slate-100 p-8">
-          <div className="scale-[0.7] sm:scale-75 md:scale-65 lg:scale-55 xl:scale-45 origin-top">
-            {TemplateComponent && resumeData && (
-              <TemplateComponent data={resumeData} scale={1} isPreview />
-            )}
+          <div className="pt-12 space-y-4">
+            <button
+              onClick={() => onUse(templateId)}
+              className="w-full py-5 bg-blue-600 text-white font-black rounded-2xl text-sm uppercase tracking-widest hover:bg-blue-500 shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all active:scale-95"
+            >
+              Use This Template
+            </button>
+            <button
+              onClick={onClose}
+              className="w-full py-5 bg-white/5 text-slate-400 font-black rounded-2xl text-sm uppercase tracking-widest hover:bg-white/10 transition-all border border-white/5"
+            >
+              Close Preview
+            </button>
           </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-t">
-          <div className="flex gap-2">
-            {template?.sections?.map((section, idx) => (
-              <span key={idx} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
-                {section}
-              </span>
-            ))}
-          </div>
-          <button
-            onClick={() => onUse(currentTemplate)}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2.5 px-6 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all"
-          >
-            <Sparkles className="h-5 w-5" />
-            Use This Template
-          </button>
         </div>
       </motion.div>
     </motion.div>

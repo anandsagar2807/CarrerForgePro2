@@ -63,7 +63,7 @@ exports.chat = async (req, res) => {
     const { message, chatHistory, resumeContext } = req.body;
     if (!message) return res.status(400).json({ error: 'Message is required' });
     const result = await aiService.chat(message, chatHistory || [], resumeContext || '');
-    res.json({ response: result });
+    res.json({ reply: result });
   } catch (error) {
     console.error('chat error:', error.message);
     res.status(500).json({ error: 'Failed to get AI response', details: error.message });

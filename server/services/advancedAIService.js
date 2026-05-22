@@ -1,24 +1,29 @@
 const axios = require('axios');
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY;
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const AI_API_KEY = process.env.OPENROUTER_API_KEY;
+const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const DEFAULT_MODEL = process.env.AI_MODEL || 'google/gemini-2.0-flash-001';
 
-const groqRequest = async (messages, temperature = 0.7, maxTokens = 3000) => {
-  if (!GROQ_API_KEY) {
-    throw new Error('API key not configured. Please set GROQ_API_KEY or OPENAI_API_KEY in environment variables.');
+const aiRequest = async (messages, temperature = 0.7, maxTokens = 3000) => {
+  if (!AI_API_KEY) {
+    throw new Error('API key not configured. Please set OPENROUTER_API_KEY in environment variables.');
   }
 
   try {
     const payload = {
-      model: 'llama-3.3-70b-versatile',
+      model: DEFAULT_MODEL,
       messages,
       temperature,
       max_tokens: maxTokens,
+      headers: {
+        "HTTP-Referer": process.env.CLIENT_URL || "http://localhost:3000",
+        "X-Title": "Zaalima Resume Forge Pro"
+      }
     };
 
-    const response = await axios.post(GROQ_API_URL, payload, {
+    const response = await axios.post(AI_API_URL, payload, {
       headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Authorization': `Bearer ${AI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       timeout: 45000,
@@ -26,14 +31,14 @@ const groqRequest = async (messages, temperature = 0.7, maxTokens = 3000) => {
 
     return response.data.choices[0]?.message?.content;
   } catch (error) {
-    console.error('Groq API error:', error.response?.data || error.message);
+    console.error('OpenRouter API error:', error.response?.data || error.message);
     throw new Error(error.response?.data?.error?.message || 'AI service unavailable');
   }
 };
 
 // 1. Brutal Honest Review
 exports.brutalHonestReview = async (resumeText) => {
-  const content = await groqRequest([
+  const content = await aiRequest([
     {
       role: 'system',
       content: `You are a brutally honest senior hiring manager from FAANG companies (Google, Meta, Amazon, Apple, Microsoft).
@@ -100,20 +105,20 @@ Return valid JSON with this structure:
   }
 };
 
-// 2. ATS Optimizer
+// 2. ATS Optimizer (JD Analysis Agent + AI Rewrite Logic)
 exports.atsOptimizer = async (resumeText, jobDescription) => {
-  const content = await groqRequest([
+  const content = await aiRequest([
     {
       role: 'system',
-      content: `You are an expert ATS (Applicant Tracking System) optimization specialist.
-You understand exactly how ATS systems parse, score, and rank resumes.
+      content: `You are a sophisticated JD Analysis Agent and ATS Optimization Specialist.
+Your task is to scrape and parse the target Job Description to semantically extract and rank critical keywords, then use AI Rewrite Logic to guide the LLM to rewrite the user's experience to explicitly include those keywords, boosting the calculated "ATS Score."
 
 Analyze the resume against the job description and provide:
 - Exact ATS compatibility score (0-100)
-- Missing critical keywords from the JD
+- Ranked critical keywords from the JD (High/Medium/Low importance)
 - Found keywords and their frequency
 - Keyword density heatmap data
-- Rewritten bullet points optimized for ATS
+- Rewritten bullet points optimized for ATS (using the XYZ formula: Accomplished X, as measured by Y, by doing Z)
 - Section-by-section optimization suggestions
 
 Return valid JSON with this structure:
@@ -144,9 +149,9 @@ Return valid JSON with this structure:
   "optimizedBullets": [
     {
       "original": "original bullet",
-      "optimized": "ATS-optimized version",
+      "optimized": "ATS-optimized version including JD keywords",
       "keywordsAdded": ["keyword1", "keyword2"],
-      "improvement": "Why this is better"
+      "improvement": "Why this is better for ATS"
     }
   ],
   "sectionScores": {
@@ -161,7 +166,15 @@ Return valid JSON with this structure:
     },
     {
       role: 'user',
-      content: `Optimize this resume for ATS against this job description. Provide detailed keyword analysis and rewritten bullets.\n\nResume:\n${resumeText}\n\nJob Description:\n${jobDescription}`
+      content: `Analyze the following job description and optimize my resume. 
+      1. Extract and rank keywords.
+      2. Rewrite my experience bullet points to include these keywords while maintaining the XYZ formula.
+      
+      Resume:
+      ${resumeText}
+      
+      Job Description:
+      ${jobDescription}`
     }
   ], 0.7, 4000);
 
@@ -185,7 +198,7 @@ Return valid JSON with this structure:
 
 // 3. Bullet Point Transformer
 exports.bulletPointTransformer = async (bullets, jobContext = '') => {
-  const content = await groqRequest([
+  const content = await aiRequest([
     {
       role: 'system',
       content: `You are an expert resume writer specializing in the XYZ formula:
@@ -242,7 +255,7 @@ Return valid JSON with this structure:
 exports.industryToneMatch = async (resumeText, targetCompanies, targetRole) => {
   const companyList = Array.isArray(targetCompanies) ? targetCompanies.join(', ') : targetCompanies;
 
-  const content = await groqRequest([
+  const content = await aiRequest([
     {
       role: 'system',
       content: `You are an expert in corporate culture and industry-specific resume writing.
@@ -313,7 +326,7 @@ Return valid JSON with this structure:
 
 // 5. Final Polish Review
 exports.finalPolishReview = async (resumeText) => {
-  const content = await groqRequest([
+  const content = await aiRequest([
     {
       role: 'system',
       content: `You are a meticulous resume editor and premium copywriter.
@@ -445,7 +458,7 @@ ${resumeText}`
 RESUME:
 ${resumeText}`;
 
-  const content = await groqRequest([
+  const content = await aiRequest([
     {
       role: 'system',
       content: `You are an expert ATS (Applicant Tracking System) and resume analyzer. Analyze the resume and provide a comprehensive strength assessment.

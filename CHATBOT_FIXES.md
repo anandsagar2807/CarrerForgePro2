@@ -86,4 +86,4 @@ To test the fixes:
 ✅ Chat page now stays in place when opened
 ✅ Chatbot responses are natural and conversational
 ✅ No asterisks or markdown formatting in responses
-✅ Better user experience with human-like interactions
+✅ Better user experience with human-like interactions 
