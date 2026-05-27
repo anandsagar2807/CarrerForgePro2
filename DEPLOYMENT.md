@@ -5,7 +5,7 @@
 Before deploying, ensure you have:
 - Node.js 18+ installed
 - MongoDB Atlas account
-- OpenAI API key or Groq API key
+- Groq API key
 - Vercel account (for frontend) or any hosting service
 - Render/Railway account (for backend) or any Node.js hosting
 
@@ -70,17 +70,6 @@ VITE_API_URL=https://your-backend-domain.com
 5. Add environment variable:
    - `VITE_API_URL`: Your backend URL from step 1
 6. Click "Deploy"
-
-#### Using Netlify:
-1. Go to [netlify.com](https://netlify.com) and sign in
-2. Click "Add new site" → "Import an existing project"
-3. Connect to GitHub and select your repository
-4. Configure:
-   - **Base directory**: frontend
-   - **Build command**: `npm run build`
-   - **Publish directory**: frontend/dist
-5. Add environment variable: `VITE_API_URL`
-6. Click "Deploy site"
 
 ### 3. Update Backend CORS
 
