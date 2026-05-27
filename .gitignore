@@ -1,33 +1,21 @@
 # Dependencies
 node_modules/
-frontend/node_modules/
-server/node_modules/
 
-# Build output
-dist/
-build/
-frontend/dist/
-frontend/build/
-
-# Environment variables
+# Environment
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-frontend/.env
-frontend/.env.local
-server/.env
+.env.production
+
+# Uploads
+backend/uploads/
 
 # Logs
 *.log
-server/server.log
-server-output.log
+npm-debug.log*
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
-desktop.ini
 
 # IDE
 .vscode/
@@ -35,12 +23,11 @@ desktop.ini
 *.swp
 *.swo
 
-# Claude
-.claude/
-
-# Package lock files (optional - uncomment if you don't want to track them)
-# package-lock.json
+# Build
+dist/
+build/
+.cache/
 
 # Misc
-*.bak
 *.tmp
+*.temp
