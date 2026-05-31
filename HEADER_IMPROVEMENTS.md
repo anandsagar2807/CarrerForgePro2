@@ -1,7 +1,6 @@
 # ResumeForge Pro - Header Improvements Summary
 
 ## Completed Enhancements
-
 ### 1. **Home Page (Landing Page)**
 - ✅ Added professional Navbar component to the top of the page
 - ✅ Adjusted Hero section padding to accommodate the navbar (reduced top padding)
