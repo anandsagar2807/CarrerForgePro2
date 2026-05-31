@@ -1,157 +1,236 @@
 # ResumeForge Pro - Deployment Guide
-## Prerequisites
 
-Before deploying, ensure you have:
-- Node.js 18+ installed
-- MongoDB Atlas account
-- Groq API key
-- Vercel account (for frontend) or any hosting service
-- Render/Railway account (for backend) or any Node.js hosting
+This guide explains how to deploy the application to production using:
+- Frontend: Vercel (recommended)
+- Backend: Render (recommended) or Railway
+- Database: MongoDB Atlas
 
-## Environment Variables
+The instructions are written to match the repository structure typically used in this project:
+- Frontend in `frontend/`
+- Backend in `backend/`
 
-### Backend (.env)
-```env
-PORT=5000
-MONGO_URI=your_mongodb_atlas_connection_string
-OPENAI_API_KEY=your_openai_api_key
-GROQ_API_KEY=your_groq_api_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-STRIPE_PRO_PRICE_ID=your_stripe_pro_price_id
-CLIENT_URL=https://your-frontend-domain.com
-NODE_ENV=production
-JWT_SECRET=your_jwt_secret_key_here
-```
-
-### Frontend (.env)
-```env
-VITE_API_URL=https://your-backend-domain.com
-```
-
-## Deployment Steps
-
-### 1. Backend Deployment (Render/Railway)
-
-#### Using Render:
-1. Go to [render.com](https://render.com) and sign in
-2. Click "New +" → "Web Service"
-3. Connect your GitHub repository
-4. Configure:
-   - **Name**: resumeforge-backend
-   - **Root Directory**: server
-   - **Environment**: Node
-   - **Build Command**: `npm install`
-   - **Start Command**: `node index.js`
-5. Add all environment variables from above
-6. Click "Create Web Service"
-7. Copy the deployed URL (e.g., https://resumeforge-backend.onrender.com)
-
-#### Using Railway:
-1. Go to [railway.app](https://railway.app) and sign in
-2. Click "New Project" → "Deploy from GitHub repo"
-3. Select your repository
-4. Add environment variables
-5. Set root directory to `server`
-6. Deploy
-
-### 2. Frontend Deployment (Vercel)
-
-#### Using Vercel:
-1. Go to [vercel.com](https://vercel.com) and sign in
-2. Click "Add New" → "Project"
-3. Import your GitHub repository
-4. Configure:
-   - **Framework Preset**: Vite
-   - **Root Directory**: frontend
-   - **Build Command**: `npm run build`
-   - **Output Directory**: dist
-5. Add environment variable:
-   - `VITE_API_URL`: Your backend URL from step 1
-6. Click "Deploy"
-
-### 3. Update Backend CORS
-
-After deploying frontend, update the backend `.env`:
-```env
-CLIENT_URL=https://your-vercel-app.vercel.app
-```
-
-Redeploy the backend for changes to take effect.
-
-### 4. MongoDB Atlas Setup
-
-1. Go to [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a free cluster
-3. Click "Connect" → "Connect your application"
-4. Copy the connection string
-5. Replace `<password>` with your database password
-6. Add to backend environment variables as `MONGO_URI`
-7. In "Network Access", add `0.0.0.0/0` to allow connections from anywhere
-
-## Production Checklist
-
-- [ ] MongoDB Atlas cluster created and connection string added
-- [ ] All environment variables configured
-- [ ] Backend deployed and health endpoint working (`/api/health`)
-- [ ] Frontend deployed and can access backend
-- [ ] CORS configured correctly
-- [ ] API keys (OpenAI/Groq) are valid and have credits
-- [ ] Test all features: resume builder, AI analysis, cover letter generation
-- [ ] SSL/HTTPS enabled (automatic on Vercel/Render)
-- [ ] Custom domain configured (optional)
-
-## Testing Production
-
-1. Visit your frontend URL
-2. Test the following:
-   - Homepage loads correctly
-   - Navigate to Templates page
-   - Try the Analyze feature with sample resume and JD
-   - Test AI Bullet Rewriter
-   - Test Interview Prep feature
-   - Test Cover Letter generator
-   - Test AI Chat Assistant
-
-## Troubleshooting
-
-### Backend not connecting to MongoDB
-- Check MongoDB Atlas IP whitelist includes `0.0.0.0/0`
-- Verify connection string format
-- Check database user has read/write permissions
-
-### Frontend can't reach backend
-- Verify `VITE_API_URL` is set correctly
-- Check CORS settings in backend
-- Ensure backend is deployed and running
-
-### AI features not working
-- Verify API keys are valid
-- Check API key has sufficient credits
-- Review backend logs for errors
-
-## Monitoring
-
-- **Backend logs**: Check Render/Railway dashboard
-- **Frontend logs**: Check Vercel/Netlify dashboard
-- **Database**: Monitor MongoDB Atlas dashboard
-
-## Cost Estimates
-
-- **MongoDB Atlas**: Free tier (512MB)
-- **Render/Railway**: Free tier available
-- **Vercel/Netlify**: Free tier for personal projects
-- **OpenAI API**: Pay per use (~$0.002 per request)
-- **Groq API**: Free tier available
-
-## Support
-
-For issues, check:
-1. Backend logs
-2. Frontend console errors
-3. MongoDB Atlas connection status
-4. API key validity
+If your backend folder is named `server/` in your repo, use that instead.
 
 ---
 
-**Your ResumeForge Pro is now ready for production! 🚀**
+## Prerequisites
+
+- Node.js 18+ (Node 20 LTS also works)
+- A MongoDB Atlas cluster and database user
+- A Groq API key (for AI features)
+- (Optional) Stripe keys if you are enabling payments
+- Accounts on:
+  - Vercel (frontend)
+  - Render or Railway (backend)
+
+---
+
+## Environment variables
+
+Use the hosting provider dashboards to set environment variables in production. Do not commit real secrets to GitHub.
+
+### Backend environment variables (production)
+
+Set these in Render/Railway for the backend service:
+
+```env
+NODE_ENV=production
+PORT=5000
+
+# Database
+MONGODB_URI=your_mongodb_atlas_connection_string
+
+# AI
+GROQ_API_KEY=your_groq_api_key
+
+# Auth
+JWT_SECRET=your_long_random_secret
+
+# CORS
+CLIENT_URL=https://your-frontend-domain.com
+
+# Optional: Stripe (only if enabled)
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+STRIPE_PRO_PRICE_ID=your_stripe_pro_price_id
+```
+
+Notes:
+- Some earlier docs use `MONGO_URI`. This project should standardize on `MONGODB_URI`.
+- If your code currently expects `MONGO_URI`, either add `MONGO_URI` in production as well, or update the backend code to read `MONGODB_URI`.
+
+### Frontend environment variables (production)
+
+Set these in Vercel:
+
+```env
+VITE_API_BASE_URL=https://your-backend-domain.com
+```
+
+Notes:
+- Some earlier docs use `VITE_API_URL`. This project should standardize on `VITE_API_BASE_URL`.
+- If the frontend code expects `VITE_API_URL`, set that in Vercel instead (or in addition).
+
+---
+
+## Deployment overview (recommended order)
+
+1. Deploy the backend first (Render or Railway)
+2. Deploy the frontend (Vercel)
+3. Update backend CORS to allow the deployed frontend URL
+4. Re-deploy backend if you changed environment variables
+5. Run production tests
+
+---
+
+## Step 1: Deploy the backend (Render)
+
+1. Sign in to Render
+2. Create a new "Web Service"
+3. Connect your GitHub repository
+4. Configure the service:
+   - Name: `resumeforge-backend` (or any name)
+   - Environment: Node
+   - Root directory: `backend` (or `server` if that is your backend folder)
+   - Build command: `npm install`
+   - Start command:
+     - Use `npm start` if you have a start script
+     - Otherwise use the server entrypoint (commonly `node index.js`)
+5. Add the backend environment variables (see above)
+6. Deploy
+
+After deployment:
+- Copy your backend URL from Render (example: `https://your-service.onrender.com`)
+- Verify health endpoint:
+  - `GET https://your-service.onrender.com/api/health`
+
+---
+
+## Step 1 (alternative): Deploy the backend (Railway)
+
+1. Sign in to Railway
+2. Create a new project and deploy from GitHub
+3. Select the repository
+4. Set the root directory to `backend` (or `server`)
+5. Add environment variables (same as above)
+6. Deploy
+
+---
+
+## Step 2: Deploy the frontend (Vercel)
+
+1. Sign in to Vercel
+2. Create a new project and import your GitHub repository
+3. Configure:
+   - Framework preset: Vite
+   - Root directory: `frontend`
+   - Build command: `npm run build`
+   - Output directory: `dist`
+4. Add environment variable:
+   - `VITE_API_BASE_URL` = the backend URL from Step 1
+5. Deploy
+
+After deployment:
+- Copy your frontend URL from Vercel (example: `https://your-app.vercel.app`)
+
+---
+
+## Step 3: Configure backend CORS for production
+
+Update the backend environment variable:
+
+```env
+CLIENT_URL=https://your-app.vercel.app
+```
+
+Then redeploy the backend.
+
+---
+
+## MongoDB Atlas setup
+
+1. Create a MongoDB Atlas cluster
+2. Create a database user
+3. In Network Access:
+   - For development: you may temporarily allow `0.0.0.0/0`
+   - For production: prefer allowing only your hosting provider IP ranges where possible
+4. Get your connection string and set it as `MONGODB_URI` in the backend environment variables
+
+---
+
+## Production testing checklist
+
+Backend:
+- `GET /api/health` returns 200
+- MongoDB connection is successful (check logs)
+- Rate limiter is not blocking normal usage
+
+Frontend:
+- App loads successfully
+- Routes work:
+  - `/templates`
+  - `/builder`
+  - `/analyze`
+  - `/cover-letter`
+  - `/chat`
+  - `/interview-prep`
+
+End-to-end:
+- Register/login works
+- Resume save/load works
+- AI endpoints respond:
+  - Analyze JD
+  - ATS score
+  - Rewrite
+  - Cover letter
+  - Chat
+  - Interview questions
+- PDF export works (if enabled)
+
+---
+
+## Troubleshooting
+
+### Frontend cannot reach backend
+
+Symptoms:
+- Requests fail in the browser
+- CORS errors in console
+
+Fixes:
+- Ensure Vercel env var points to the correct backend URL:
+  - `VITE_API_BASE_URL=https://...`
+- Ensure backend `CLIENT_URL` matches your Vercel domain
+- Ensure the backend is deployed and running
+
+### Backend cannot connect to MongoDB
+
+Fixes:
+- Confirm `MONGODB_URI` is correct
+- Confirm Atlas Network Access allows your server
+- Confirm the database user has correct permissions
+
+### AI features not working
+
+Fixes:
+- Ensure `GROQ_API_KEY` is set in the backend host
+- Check backend logs for upstream API errors
+- Confirm request rate limits are not being triggered
+
+---
+
+## Monitoring
+
+- Backend logs: Render/Railway dashboard
+- Frontend logs: Vercel dashboard
+- Database monitoring: MongoDB Atlas dashboard
+
+---
+
+## Cost notes
+
+Costs depend on usage. Typical starting setup:
+- MongoDB Atlas: free tier available
+- Render/Railway: free tiers available (may sleep on inactivity)
+- Vercel: free tier available
+- AI APIs: usage-based (Groq pricing depends on plan)
