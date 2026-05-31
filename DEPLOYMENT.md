@@ -1,7 +1,6 @@
 # ResumeForge Pro - Deployment Guide
 
 ## Prerequisites
-
 Before deploying, ensure you have:
 - Node.js 18+ installed
 - MongoDB Atlas account
