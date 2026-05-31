@@ -1,6 +1,4 @@
-# Chatbot Fixes - April 27, 2026
-
-## Issues Fixed
+# Chatbot Fixes
 
 ### 1. Auto-Redirect to Header Issue ✅
 **Problem**: When opening the chatbot page, it was automatically scrolling to the top/header instead of staying on the chat interface.
