@@ -1,4 +1,5 @@
 # Chatbot Fixes
+
 ## Issues Fixed
 
 ### 1. Auto-Redirect to Header Issue ✅
@@ -7,6 +8,7 @@
 **Solution**: Modified the scroll behavior in the `useEffect` hook to only scroll within the messages container, not the entire page.
 
 **Changes Made**:
+
 ```javascript
 // Before:
 messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,15 +26,16 @@ The `block: 'nearest'` parameter ensures the scroll only happens within the chat
 ### 2. Conversational Responses Without Asterisks ✅
 **Problem**: Chatbot responses included asterisks (*) and markdown formatting, making it look robotic instead of conversational.
 
-**Solution**: 
-1. Updated the system prompt to explicitly instruct the AI to write like a human without formatting
-2. Added post-processing to strip out any asterisks and markdown characters from responses
+**Solution**:
+1. Updated the system prompt to explicitly instruct the AI to write like a human without formatting.
+2. Added post-processing to remove asterisks and common markdown heading markers from responses.
 
 **Changes Made**:
 
-#### Updated System Prompt:
+#### Updated System Prompt
+
 ```javascript
-const SYSTEM_PROMPT = `You are ResumeForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidance, cover letters, and skill development.
+const SYSTEM_PROMPT = `You are ResumeForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidance, c[...]
 
 IMPORTANT RULES:
 - Write like a friendly human career advisor, not a bot
@@ -43,11 +46,17 @@ IMPORTANT RULES:
 - Speak directly to the user as if you're having a conversation`;
 ```
 
-#### Added Response Cleaning:
+#### Added Response Cleaning
+
 ```javascript
 let aiResponse = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
+
 // Remove asterisks and markdown formatting
-aiResponse = aiResponse.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#{1,6}\s/g, '');
+aiResponse = aiResponse
+  .replace(/\*\*/g, '')
+  .replace(/\*/g, '')
+  .replace(/#{1,6}\s/g, '');
+
 setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
 ```
 
@@ -56,8 +65,8 @@ This removes:
 - `*italic text*` → becomes regular text
 - `# Headers` → becomes regular text
 
-#### Updated Fallback Message:
-Removed asterisks from the fallback message when API key is not configured.
+#### Updated Fallback Message
+Removed asterisks from the fallback message when the API key is not configured.
 
 ---
 
@@ -65,20 +74,24 @@ Removed asterisks from the fallback message when API key is not configured.
 
 To test the fixes:
 
-1. **Navigate to Chat Page**: 
+1. **Navigate to Chat Page**
    - Click on the floating AI assistant button
    - Or go directly to `/chat` route
-   - Page should stay on the chat interface, not scroll to top
+   - The page should stay on the chat interface, not scroll to top
 
-2. **Test Conversational Responses**:
+2. **Test Conversational Responses**
    - Ask any question to the chatbot
    - Responses should be natural and conversational
    - No asterisks or markdown formatting should appear
    - Text should read like a human advisor speaking
 
+---
+
 ## Files Modified
 
 - `frontend/src/pages/ChatPage.jsx`
+
+---
 
 ## Result
 
