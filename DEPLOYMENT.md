@@ -1,16 +1,18 @@
-# ResumeForge Pro - Deployment Guide
+# CarrerForge Pro - Deployment Guide
+
+> Repo: **anandsagar2807/CarrerForgePro2**
 
 ## Prerequisites
 Before deploying, ensure you have:
-- Node.js 18+ installed
+- Node.js **18+** installed
 - MongoDB Atlas account
-- OpenAI API key or Groq API key
+- OpenAI API key **or** Groq API key
 - Vercel account (for frontend) or any hosting service
 - Render/Railway account (for backend) or any Node.js hosting
 
 ## Environment Variables
 
-### Backend (.env)
+### Backend (`server/.env`)
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_atlas_connection_string
@@ -24,7 +26,7 @@ NODE_ENV=production
 JWT_SECRET=your_jwt_secret_key_here
 ```
 
-### Frontend (.env)
+### Frontend (`frontend/.env`)
 ```env
 VITE_API_URL=https://your-backend-domain.com
 ```
@@ -33,23 +35,23 @@ VITE_API_URL=https://your-backend-domain.com
 
 ### 1. Backend Deployment (Render/Railway)
 
-#### Using Render:
+#### Using Render
 1. Go to [render.com](https://render.com) and sign in
-2. Click "New +" → "Web Service"
+2. Click **New +** → **Web Service**
 3. Connect your GitHub repository
 4. Configure:
-   - **Name**: resumeforge-backend
-   - **Root Directory**: server
+   - **Name**: carrerforge-backend
+   - **Root Directory**: `server`
    - **Environment**: Node
    - **Build Command**: `npm install`
    - **Start Command**: `node index.js`
 5. Add all environment variables from above
-6. Click "Create Web Service"
-7. Copy the deployed URL (e.g., https://resumeforge-backend.onrender.com)
+6. Click **Create Web Service**
+7. Copy the deployed URL (example: `https://carrerforge-backend.onrender.com`)
 
-#### Using Railway:
+#### Using Railway
 1. Go to [railway.app](https://railway.app) and sign in
-2. Click "New Project" → "Deploy from GitHub repo"
+2. Click **New Project** → **Deploy from GitHub repo**
 3. Select your repository
 4. Add environment variables
 5. Set root directory to `server`
@@ -57,33 +59,32 @@ VITE_API_URL=https://your-backend-domain.com
 
 ### 2. Frontend Deployment (Vercel)
 
-#### Using Vercel:
+#### Using Vercel
 1. Go to [vercel.com](https://vercel.com) and sign in
-2. Click "Add New" → "Project"
+2. Click **Add New** → **Project**
 3. Import your GitHub repository
 4. Configure:
    - **Framework Preset**: Vite
-   - **Root Directory**: frontend
+   - **Root Directory**: `frontend`
    - **Build Command**: `npm run build`
-   - **Output Directory**: dist
+   - **Output Directory**: `dist`
 5. Add environment variable:
-   - `VITE_API_URL`: Your backend URL from step 1
-6. Click "Deploy"
+   - `VITE_API_URL`: your backend URL from step 1
+6. Click **Deploy**
 
-#### Using Netlify:
+#### Using Netlify
 1. Go to [netlify.com](https://netlify.com) and sign in
-2. Click "Add new site" → "Import an existing project"
+2. Click **Add new site** → **Import an existing project**
 3. Connect to GitHub and select your repository
 4. Configure:
-   - **Base directory**: frontend
+   - **Base directory**: `frontend`
    - **Build command**: `npm run build`
-   - **Publish directory**: frontend/dist
+   - **Publish directory**: `frontend/dist`
 5. Add environment variable: `VITE_API_URL`
-6. Click "Deploy site"
+6. Click **Deploy site**
 
 ### 3. Update Backend CORS
-
-After deploying frontend, update the backend `.env`:
+After deploying the frontend, update the backend `.env`:
 ```env
 CLIENT_URL=https://your-vercel-app.vercel.app
 ```
@@ -91,17 +92,15 @@ CLIENT_URL=https://your-vercel-app.vercel.app
 Redeploy the backend for changes to take effect.
 
 ### 4. MongoDB Atlas Setup
-
 1. Go to [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
 2. Create a free cluster
-3. Click "Connect" → "Connect your application"
+3. Click **Connect** → **Connect your application**
 4. Copy the connection string
 5. Replace `<password>` with your database password
 6. Add to backend environment variables as `MONGO_URI`
-7. In "Network Access", add `0.0.0.0/0` to allow connections from anywhere
+7. In **Network Access**, add `0.0.0.0/0` to allow connections from anywhere
 
 ## Production Checklist
-
 - [ ] MongoDB Atlas cluster created and connection string added
 - [ ] All environment variables configured
 - [ ] Backend deployed and health endpoint working (`/api/health`)
@@ -113,7 +112,6 @@ Redeploy the backend for changes to take effect.
 - [ ] Custom domain configured (optional)
 
 ## Testing Production
-
 1. Visit your frontend URL
 2. Test the following:
    - Homepage loads correctly
@@ -142,21 +140,18 @@ Redeploy the backend for changes to take effect.
 - Review backend logs for errors
 
 ## Monitoring
-
 - **Backend logs**: Check Render/Railway dashboard
 - **Frontend logs**: Check Vercel/Netlify dashboard
 - **Database**: Monitor MongoDB Atlas dashboard
 
 ## Cost Estimates
-
 - **MongoDB Atlas**: Free tier (512MB)
 - **Render/Railway**: Free tier available
 - **Vercel/Netlify**: Free tier for personal projects
-- **OpenAI API**: Pay per use (~$0.002 per request)
-- **Groq API**: Free tier available
+- **OpenAI API**: Pay per use (varies by model/usage)
+- **Groq API**: Free tier available (depends on plan)
 
 ## Support
-
 For issues, check:
 1. Backend logs
 2. Frontend console errors
@@ -165,4 +160,4 @@ For issues, check:
 
 ---
 
-**Your ResumeForge Pro is now ready for production! 🚀**
+**Your CarrerForge Pro is now ready for production!**
