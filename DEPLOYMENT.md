@@ -100,6 +100,41 @@ Redeploy the backend for changes to take effect.
 6. Add to backend environment variables as `MONGO_URI`
 7. In **Network Access**, add `0.0.0.0/0` to allow connections from anywhere
 
+### 5. MongoDB Atlas Best Practices (Recommended)
+These steps help make your deployment safer and more reliable in production.
+
+#### Network access (avoid `0.0.0.0/0` when possible)
+- **Best**: Restrict access to only your hosting provider egress IP(s).
+  - If your backend is on Render/Railway, use their documented outbound IP ranges (if available) and add only those.
+- **If you must use broad access** (common for hobby deployments): keep `0.0.0.0/0` temporarily, but rotate DB credentials periodically.
+
+#### Create a least-privilege database user
+- Create a dedicated DB user for the app with only the permissions it needs.
+- Use a strong, unique password (store only in environment variables — never commit).
+
+#### Use separate databases for dev and prod
+- Prefer separate **clusters** or at least separate **databases** (e.g., `carrerforge_dev` and `carrerforge_prod`) to prevent accidental data loss.
+
+#### Indexes (performance)
+- Add indexes for common query fields (examples):
+  - `users.email` (unique)
+  - any field you filter/sort on frequently (e.g., `createdAt`, `userId`, `status`)
+- Monitor slow queries in Atlas and add indexes accordingly.
+
+#### Backups & recovery
+- Enable backups when you move beyond the free tier.
+- For free tier: periodically export critical collections (or use mongodump from a trusted machine) if the data matters.
+
+#### Connection string & driver options
+- Use the Atlas-provided connection string and ensure it includes your DB name.
+- Prefer enabling retryable writes (Atlas default) and TLS (Atlas default).
+
+#### Monitoring
+- Watch these Atlas metrics:
+  - **Connections** (unexpected spikes)
+  - **Query Targeting / Scan** (indicates missing indexes)
+  - **Disk / Storage** (approaching limits)
+
 ## Production Checklist
 - [ ] MongoDB Atlas cluster created and connection string added
 - [ ] All environment variables configured
