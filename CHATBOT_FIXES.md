@@ -2,7 +2,7 @@
 
 ## Issues Fixed
 
-### 1. Auto-Redirect to Header Issue 
+### 1. Auto-Redirect to Header Issue
 **Problem**: When opening the chatbot page, it was automatically scrolling to the top/header instead of staying on the chat interface.
 
 **Solution**: Modified the scroll behavior in the `useEffect` hook to only scroll within the messages container, not the entire page.
@@ -13,7 +13,7 @@ The `block: 'nearest'` parameter ensures the scroll only happens within the chat
 
 ---
 
-### 2. Conversational Responses Without Asterisks 
+### 2. Conversational Responses Without Asterisks
 **Problem**: Chatbot responses included asterisks (*) and markdown formatting, making it look robotic instead of conversational.
 
 **Solution**:
@@ -25,7 +25,7 @@ The `block: 'nearest'` parameter ensures the scroll only happens within the chat
 #### Updated System Prompt
 
 ```javascript
-const SYSTEM_PROMPT = `You are ResumeForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidance, c[...]
+const SYSTEM_PROMPT = `You are ResumeForge AI Assistant, an expert career advisor and resume writing assistant. You help users with resume writing, ATS optimization, interview prep, career guidanc[...]
 
 IMPORTANT RULES:
 - Write like a friendly human career advisor, not a bot
@@ -85,7 +85,7 @@ To test the fixes:
 
 ## Result
 
-✅ Chat page now stays in place when opened
-✅ Chatbot responses are natural and conversational
-✅ No asterisks or markdown formatting in responses
-✅ Better user experience with human-like interactions
+Chat page now stays in place when opened
+Chatbot responses are natural and conversational
+No asterisks or markdown formatting in responses
+Better user experience with human-like interactions
