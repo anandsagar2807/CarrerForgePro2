@@ -1,5 +1,4 @@
 # ResumeForge Pro - Deployment Guide
-
 This guide explains how to deploy the application to production using:
 - Frontend: Vercel (recommended)
 - Backend: Render (recommended) or Railway
