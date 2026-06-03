@@ -2,7 +2,7 @@
 
 This document tracks the fixes applied to the chatbot experience and how to verify them.
 
-## 1) Auto-Redirect / Page Jump to Header ✅
+## 1) Auto-Redirect / Page Jump to Header 
 
 **Problem**
 When opening the chatbot page, the view automatically scrolled to the top/header instead of staying on the chat interface.
@@ -16,7 +16,7 @@ Updated the scroll behavior in the `useEffect` hook to scroll **only inside the 
 - Scrolling is now scoped to the chat messages container.
 - Using `block: 'nearest'` ensures the scroll stays within the container and does not force the page to jump.
 
-## 2) Conversational Responses (No Asterisks / No Markdown Formatting) ✅
+## 2) Conversational Responses (No Asterisks / No Markdown Formatting) 
 
 **Problem**
 Chatbot responses included asterisks (`*`) and other markdown formatting, making replies look robotic instead of conversational.
