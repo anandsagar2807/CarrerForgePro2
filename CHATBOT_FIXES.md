@@ -1,5 +1,4 @@
 # Chatbot Fixes
-
 ## Issues Fixed
 
 ### 1. Auto-Redirect to Header Issue
