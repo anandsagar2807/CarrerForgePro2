@@ -1,5 +1,4 @@
 # ResumeForge Pro — Header Improvements
-
 A concise summary of the UI/header polish shipped in the **New-update** branch, focused on navigation consistency and a premium templates header.
 
 ## Overview
