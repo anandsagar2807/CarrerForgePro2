@@ -2,9 +2,7 @@
 ## Issues Fixed
 ### 1. Auto-Redirect to Header Issue
 **Problem**: When opening the chatbot page, it was automatically scrolling to the top/header instead of staying on the chat interface.
-
 **Solution**: Modified the scroll behavior in the `useEffect` hook to only scroll within the messages container, not the entire page.
-
 **Changes Made**:
 
 The `block: 'nearest'` parameter ensures the scroll only happens within the chat container, preventing the page from jumping to the top.
