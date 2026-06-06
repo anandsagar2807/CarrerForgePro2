@@ -1,5 +1,4 @@
 # ResumeForge Pro
-
 A professional AI-powered resume builder with advanced features including ATS optimization, AI bullet rewriting, interview preparation, and cover letter generation.
 ## Features
 - **8 Professional Templates**: Modern, ATS-friendly, Creative, Executive, Minimalist, Tech, Compact, and Professional
