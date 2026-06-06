@@ -6,7 +6,6 @@ Before deploying, ensure you have:
 - OpenAI API key **or** Groq API key
 - Vercel account (for frontend) or any hosting service
 - Render/Railway account (for backend) or any Node.js hosting
-
 ## Environment Variables
 
 ### Backend (`server/.env`)
