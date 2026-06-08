@@ -4,7 +4,7 @@
 - **Status**: ✅ Complete
 - **Changes**: Updated `frontend/index.html` to use `logo.png` as the website favicon
 - **Location**: The logo.png file in the frontend folder is now the site icon
-  
+- 
 ### 2. Dynamic AI-Powered Templates
 - **Status**: ✅ Complete
 - **Changes**:
@@ -89,7 +89,7 @@
 12. `server/.env` - Port update to 5001 (previous session)
 13. `frontend/.env` - API URL and model update (previous session)
 
-## 🎯 Key Features Now Available:
+##  Key Features Now Available:
 
 1. ✅ **AI-Powered Dynamic Templates** - Every template generates unique content based on user input
 2. ✅ **Personalized Resume Generation** - Tailored to job title, industry, and experience level
@@ -98,7 +98,7 @@
 5. ✅ **Clean Navigation** - Headers removed from home and template pages
 6. ✅ **Custom Website Icon** - Professional branding with logo.png
 
-## 🌐 Access Information:
+## Access Information:
 
 - **Website**: http://localhost:3003
 - **Backend API**: http://localhost:5001
