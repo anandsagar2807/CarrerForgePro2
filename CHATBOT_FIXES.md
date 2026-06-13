@@ -9,7 +9,6 @@
 The `block: 'nearest'` parameter ensures the scroll only happens within the chat container, preventing the page from jumping to the top.
 
 ---
-
 ### 2. Conversational Responses Without Asterisks
 **Problem**: Chatbot responses included asterisks (*) and markdown formatting, making it look robotic instead of conversational.
 
